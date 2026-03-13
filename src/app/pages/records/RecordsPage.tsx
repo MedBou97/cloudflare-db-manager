@@ -58,16 +58,17 @@ export async function RecordsPage({ ctx, request }: RequestInfo) {
   const totalPages = Math.ceil(total / RECORDS_PER_PAGE);
   const isAdmin = ctx.user?.role === ROLES.ADMIN;
 
+  // might not need to log every browse action, but let's keep it for now to have more data in the audit log
   // Log the view action
-  if (ctx.user) {
-    await logAction(
-      ctx.user.id,
-      ctx.user.username,
-      AUDIT_ACTIONS.VIEW_RECORDS,
-      null,
-      `${ctx.user.username} browsed records (page ${page}${search ? `, search: "${search}"` : ""}${category ? `, category: "${category}"` : ""}${status ? `, status: "${status}"` : ""})`,
-    );
-  }
+  // if (ctx.user) {
+  //   await logAction(
+  //     ctx.user.id,
+  //     ctx.user.username,
+  //     AUDIT_ACTIONS.VIEW_RECORDS,
+  //     null,
+  //     `${ctx.user.username} browsed records (page ${page}${search ? `, search: "${search}"` : ""}${category ? `, category: "${category}"` : ""}${status ? `, status: "${status}"` : ""})`,
+  //   );
+  // }
 
   const buildUrl = (updates: Record<string, string | number>) => {
     const params = new URLSearchParams();

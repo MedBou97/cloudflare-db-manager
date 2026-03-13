@@ -81,13 +81,17 @@ export async function getRecords(params: GetRecordsParams = {}) {
     db.vectorRecord.count({ where }),
   ]);
 
-  await logAction(
-    ctx.user.id,
-    ctx.user.username,
-    AUDIT_ACTIONS.VIEW_RECORDS,
-    null,
-    `${ctx.user.username} browsed records (page ${page}${search ? `, search: "${search}"` : ""}${category ? `, category: "${category}"` : ""}${status ? `, status: "${status}"` : ""})`,
-  );
+  /*
+    might not need to log record views since not much important and might generate a lot of logs,
+	but can always add later if needed
+  */
+  // await logAction(
+  //   ctx.user.id,
+  //   ctx.user.username,
+  //   AUDIT_ACTIONS.VIEW_RECORDS,
+  //   null,
+  //   `${ctx.user.username} browsed records (page ${page}${search ? `, search: "${search}"` : ""}${category ? `, category: "${category}"` : ""}${status ? `, status: "${status}"` : ""})`,
+  // );
 
   return { records, total, page, error: null };
 }
