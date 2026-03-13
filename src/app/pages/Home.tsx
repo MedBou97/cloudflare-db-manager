@@ -56,12 +56,12 @@ export function Home({ ctx }: RequestInfo) {
       <section className="grid grid-cols-[minmax(320px,1.3fr)_minmax(320px,0.9fr)] max-[900px]:grid-cols-1 gap-8 items-center min-h-[calc(100vh-64px)] max-[900px]:min-h-0 max-w-[1180px] mx-auto">
         <div className="relative z-[1]">
           <p className={kickerClass}>DB Manager</p>
-          <h1 className="mt-[18px] mb-0 max-w-[11ch] max-[900px]:max-w-none font-serif text-[clamp(3rem,6vw,5.2rem)] leading-[0.95] tracking-[-0.045em]">
+          <h1 className="mt-[14px] mb-0 max-w-[11ch] max-[900px]:max-w-none font-serif text-[clamp(3rem,6vw,5.2rem)] leading-[0.95] tracking-[-0.045em]">
             {isLoggedIn
               ? `Welcome back, ${ctx.user?.username}.`
               : "Keep account access and internal records under control."}
           </h1>
-          <p className="mt-5 mb-0 max-w-[39rem] text-[#5f5044] text-[1.05rem] leading-[1.75]">
+          <p className="mt-2 mb-0 max-w-[39rem] text-[#5f5044] text-[1.05rem] leading-[1.75]">
             {isLoggedIn
               ? "Your account is created but not yet verified. Check your inbox for the verification link."
               : "A role-based vector data management workspace with full audit logging."}

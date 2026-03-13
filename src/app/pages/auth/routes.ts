@@ -55,7 +55,7 @@ export const authRoutes = [
     headers.set("Location", "/");
 
     return new Response(null, {
-      status: 302,
+      status: 303,
       headers,
     });
   }),

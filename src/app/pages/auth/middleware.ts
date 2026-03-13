@@ -43,19 +43,21 @@ export const loadAuthContext =
 
 export const requireVerified =
   (): RouteMiddleware =>
-  ({ ctx }) => {
+  ({ ctx, headers }) => {
     if (!ctx.user || !ctx.user.verified) {
       return redirectToLogin();
     }
+    headers.set("Cache-Control", "no-store");
   };
 
 export const requireAdmin =
   (): RouteMiddleware =>
-  ({ ctx }) => {
+  ({ ctx, headers }) => {
     if (!ctx.user || !ctx.user.verified) {
       return redirectToLogin();
     }
     if (ctx.user.role !== ROLES.ADMIN) {
       return new Response("Forbidden", { status: 403 });
     }
+    headers.set("Cache-Control", "no-store");
   };
