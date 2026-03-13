@@ -23,10 +23,11 @@ export default defineApp([
   render(Document, [
     route("/", Home),
     route("/protected", [
-      ({ ctx }) => {
+      ({ ctx, headers }) => {
         if (!ctx.user || !ctx.user.verified) {
           return redirectToLogin();
         }
+        headers.set("Cache-Control", "no-store");
       },
       ProtectedHome,
     ]),
