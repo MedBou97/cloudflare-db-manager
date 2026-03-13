@@ -43,7 +43,7 @@ const ForgotPage = () => {
         </>
       }
     >
-      <form className="auth-form" action={handleSubmit}>
+      <form className="flex flex-col gap-4" action={handleSubmit}>
         {message ? <AuthStatus tone={message.tone} message={message.text} /> : null}
         <AuthField
           label="Email"

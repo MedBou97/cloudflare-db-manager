@@ -49,7 +49,7 @@ const ResetPage = ({ request }: RequestInfo) => {
         </>
       }
     >
-      <form className="auth-form" action={handleSubmit}>
+      <form className="flex flex-col gap-4" action={handleSubmit}>
         {error ? <AuthStatus tone="error" message={error} /> : null}
         {success ? <AuthStatus tone="success" message={success} /> : null}
         <AuthField

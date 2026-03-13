@@ -35,7 +35,7 @@ const LoginPage = () => {
         </>
       }
     >
-      <form className="auth-form" action={handleSubmit}>
+      <form className="flex flex-col gap-4" action={handleSubmit}>
         {error ? <AuthStatus tone="error" message={error} /> : null}
         <AuthField
           label="Username"
