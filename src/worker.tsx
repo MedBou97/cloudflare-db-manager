@@ -5,6 +5,8 @@ import { Home, ProtectedHome } from "@/app/pages/Home";
 import { setCommonHeaders } from "@/app/headers";
 import { loadAuthContext, redirectToLogin } from "@/app/pages/auth/middleware";
 import { authRoutes } from "@/app/pages/auth/routes";
+import { recordsRoutes } from "@/app/pages/records/routes";
+import { logsRoutes } from "@/app/pages/logs/routes";
 import { Session } from "./session/durableObject";
 import type { User } from "@prisma/client";
 
@@ -29,5 +31,7 @@ export default defineApp([
       ProtectedHome,
     ]),
     prefix("", authRoutes),
+    prefix("", recordsRoutes),
+    prefix("", logsRoutes),
   ]),
 ]);

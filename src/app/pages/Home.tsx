@@ -1,41 +1,92 @@
 import { RequestInfo } from "rwsdk/worker";
+import { AppShell } from "@/app/shared/AppShell";
+
+const kickerClass = "m-0 text-[0.8rem] font-bold tracking-[0.18em] uppercase text-[#8a7767]";
+const siteCardClass =
+  "relative z-[1] p-8 max-[640px]:p-6 border border-[rgba(86,67,48,0.12)] rounded-[32px] max-[640px]:rounded-3xl bg-[rgba(255,252,247,0.82)] shadow-[0_30px_80px_rgba(76,56,34,0.14)] backdrop-blur-[18px]";
+const dlItemClass = "pt-4 border-t border-[rgba(86,67,48,0.12)]";
 
 export function Home({ ctx }: RequestInfo) {
   const isLoggedIn = Boolean(ctx.user);
   const isVerified = Boolean(ctx.user?.verified);
 
+  if (isVerified && ctx.user) {
+    return (
+      <AppShell user={ctx.user} currentPath="/">
+        <div className="mb-8">
+          <h1 className="m-0 mb-2 font-serif text-[clamp(2rem,4vw,3rem)] leading-[1.05] tracking-[-0.03em]">
+            Welcome back, {ctx.user.username}.
+          </h1>
+          <p className="m-0 text-[#5f5044] text-[1.05rem] leading-[1.6]">
+            Your workspace is ready. Browse vector records or review the operation log.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-5">
+          <a
+            href="/records"
+            className="block p-7 border border-[rgba(86,67,48,0.12)] rounded-3xl bg-[rgba(255,252,247,0.82)] shadow-[0_8px_24px_rgba(76,56,34,0.08)] no-underline text-inherit transition-[transform,box-shadow] duration-150 hover:-translate-y-0.5 hover:shadow-[0_16px_40px_rgba(76,56,34,0.13)]"
+          >
+            <div className="text-[2rem] leading-none mb-3.5">⬡</div>
+            <h2 className="m-0 mb-2 text-[1.2rem] font-bold text-[#1f1811]">Records</h2>
+            <p className="m-0 text-sm text-[#5f5044] leading-[1.6]">
+              Browse, search, filter, and sort vector data entries. Expand any record to see full
+              details including the raw vector and metadata.
+            </p>
+          </a>
+
+          <a
+            href="/logs"
+            className="block p-7 border border-[rgba(86,67,48,0.12)] rounded-3xl bg-[rgba(255,252,247,0.82)] shadow-[0_8px_24px_rgba(76,56,34,0.08)] no-underline text-inherit transition-[transform,box-shadow] duration-150 hover:-translate-y-0.5 hover:shadow-[0_16px_40px_rgba(76,56,34,0.13)]"
+          >
+            <div className="text-[2rem] leading-none mb-3.5">📋</div>
+            <h2 className="m-0 mb-2 text-[1.2rem] font-bold text-[#1f1811]">Audit Logs</h2>
+            <p className="m-0 text-sm text-[#5f5044] leading-[1.6]">
+              View a complete history of all operations performed in this workspace — who did what
+              and when.
+            </p>
+          </a>
+        </div>
+      </AppShell>
+    );
+  }
+
   return (
-    <main className="site-shell">
-      <section className="site-hero">
-        <div className="site-copy">
-          <p className="site-kicker">DB Manager</p>
-          <h1 className="site-title">
+    <main className="min-h-screen p-8 max-[900px]:p-[18px]">
+      <section className="grid grid-cols-[minmax(320px,1.3fr)_minmax(320px,0.9fr)] max-[900px]:grid-cols-1 gap-8 items-center min-h-[calc(100vh-64px)] max-[900px]:min-h-0 max-w-[1180px] mx-auto">
+        <div className="relative z-[1]">
+          <p className={kickerClass}>DB Manager</p>
+          <h1 className="mt-[18px] mb-0 max-w-[11ch] max-[900px]:max-w-none font-serif text-[clamp(3rem,6vw,5.2rem)] leading-[0.95] tracking-[-0.045em]">
             {isLoggedIn
               ? `Welcome back, ${ctx.user?.username}.`
               : "Keep account access and internal records under control."}
           </h1>
-          <p className="site-description">
+          <p className="mt-5 mb-0 max-w-[39rem] text-[#5f5044] text-[1.05rem] leading-[1.75]">
             {isLoggedIn
-              ? "Your authentication layer is active, your data lives behind the worker, and the protected area is ready for the next feature set."
-              : "This starter now has a complete auth surface with registration, verification, recovery, and a cleaner interface to match the rest of the stack."}
+              ? "Your account is created but not yet verified. Check your inbox for the verification link."
+              : "A role-based vector data management workspace with full audit logging."}
           </p>
 
-          <div className="site-actions">
-            {isVerified ? (
-              <>
-                <a className="site-button" href="/protected">
-                  Open protected area
-                </a>
-                <a className="site-link" href="/logout">
-                  Log out
-                </a>
-              </>
+          <div className="flex flex-wrap items-center gap-4 mt-[30px] max-[640px]:flex-col max-[640px]:items-stretch">
+            {isLoggedIn ? (
+              <a
+                className="text-accent-strong font-bold no-underline [border-bottom:1px_solid_rgba(18,71,53,0.24)] hover:[border-bottom-color:rgba(18,71,53,0.56)]"
+                href="/logout"
+              >
+                Log out
+              </a>
             ) : (
               <>
-                <a className="site-button" href="/register">
+                <a
+                  className="inline-flex items-center justify-center min-w-[180px] px-5 py-4 rounded-full bg-gradient-to-br from-accent to-accent-strong text-[#f7f8f6] font-bold no-underline shadow-[0_18px_30px_rgba(18,71,53,0.2)] transition-[transform,box-shadow] duration-150 hover:-translate-y-px hover:shadow-[0_22px_34px_rgba(18,71,53,0.26)] max-[640px]:w-full max-[640px]:min-w-0"
+                  href="/register"
+                >
                   Create account
                 </a>
-                <a className="site-link" href="/login">
+                <a
+                  className="text-accent-strong font-bold no-underline [border-bottom:1px_solid_rgba(18,71,53,0.24)] hover:[border-bottom-color:rgba(18,71,53,0.56)]"
+                  href="/login"
+                >
                   Sign in
                 </a>
               </>
@@ -43,35 +94,28 @@ export function Home({ ctx }: RequestInfo) {
           </div>
         </div>
 
-        <section className="site-card" aria-label="Current access status">
-          <p className="site-card-label">Status</p>
-          <h2 className="site-card-title">
-            {isVerified
-              ? "Verified session active"
-              : isLoggedIn
-                ? "Account created, verification pending"
-                : "No active session"}
+        <section className={siteCardClass} aria-label="Current access status">
+          <p className={kickerClass}>Status</p>
+          <h2 className="mt-3.5 mb-0 font-serif text-[clamp(1.8rem,3vw,2.6rem)] leading-[1.05] tracking-[-0.03em]">
+            {isLoggedIn ? "Account created, verification pending" : "No active session"}
           </h2>
-          <p className="site-card-copy">
-            {isVerified
-              ? "You can enter protected routes and start building the actual app surface on top of the auth foundation."
-              : isLoggedIn
-                ? "You are signed in, but protected routes still require a verified account. Check your inbox for the verification link."
-                : "Start with registration or sign in to see how the worker-backed session flow behaves end to end."}
+          <p className="mt-3.5 mb-0 text-[#5f5044] leading-[1.7]">
+            {isLoggedIn
+              ? "Check your inbox for the verification link before you can access the workspace."
+              : "Sign in or create an account to access the vector data workspace."}
           </p>
-
-          <dl className="site-metrics">
-            <div>
-              <dt>User</dt>
-              <dd>{ctx.user?.username ?? "Guest"}</dd>
+          <dl className="mt-[26px] grid gap-[18px]">
+            <div className={dlItemClass}>
+              <dt className={kickerClass}>User</dt>
+              <dd className="mt-2 ml-0 text-[#1f1811] text-[1.02rem] break-words">
+                {ctx.user?.username ?? "Guest"}
+              </dd>
             </div>
-            <div>
-              <dt>Email</dt>
-              <dd>{ctx.user?.email ?? "Not signed in"}</dd>
-            </div>
-            <div>
-              <dt>Verified</dt>
-              <dd>{isVerified ? "Yes" : "No"}</dd>
+            <div className={dlItemClass}>
+              <dt className={kickerClass}>Verified</dt>
+              <dd className="mt-2 ml-0 text-[#1f1811] text-[1.02rem] break-words">
+                {isVerified ? "Yes" : "No"}
+              </dd>
             </div>
           </dl>
         </section>
@@ -82,46 +126,51 @@ export function Home({ ctx }: RequestInfo) {
 
 export function ProtectedHome({ ctx }: RequestInfo) {
   return (
-    <main className="site-shell">
-      <section className="site-hero">
-        <div className="site-copy">
-          <p className="site-kicker">Protected workspace</p>
-          <h1 className="site-title">Your verified account is active.</h1>
-          <p className="site-description">
+    <main className="min-h-screen p-8 max-[900px]:p-[18px]">
+      <section className="grid grid-cols-[minmax(320px,1.3fr)_minmax(320px,0.9fr)] max-[900px]:grid-cols-1 gap-8 items-center min-h-[calc(100vh-64px)] max-[900px]:min-h-0 max-w-[1180px] mx-auto">
+        <div className="relative z-[1]">
+          <p className={kickerClass}>Protected workspace</p>
+          <h1 className="mt-[18px] mb-0 max-w-[11ch] max-[900px]:max-w-none font-serif text-[clamp(3rem,6vw,5.2rem)] leading-[0.95] tracking-[-0.045em]">
+            Your verified account is active.
+          </h1>
+          <p className="mt-5 mb-0 max-w-[39rem] text-[#5f5044] text-[1.05rem] leading-[1.75]">
             This route is now styled to match the auth flow and can act as the base for your real
             dashboard, database views, or internal tools.
           </p>
 
-          <div className="site-actions">
-            <a className="site-button" href="/">
+          <div className="flex flex-wrap items-center gap-4 mt-[30px] max-[640px]:flex-col max-[640px]:items-stretch">
+            <a
+              className="inline-flex items-center justify-center min-w-[180px] px-5 py-4 rounded-full bg-gradient-to-br from-accent to-accent-strong text-[#f7f8f6] font-bold no-underline shadow-[0_18px_30px_rgba(18,71,53,0.2)] transition-[transform,box-shadow] duration-150 hover:-translate-y-px hover:shadow-[0_22px_34px_rgba(18,71,53,0.26)] max-[640px]:w-full max-[640px]:min-w-0"
+              href="/"
+            >
               Back home
             </a>
-            <a className="site-link" href="/logout">
+            <a
+              className="text-accent-strong font-bold no-underline [border-bottom:1px_solid_rgba(18,71,53,0.24)] hover:[border-bottom-color:rgba(18,71,53,0.56)]"
+              href="/logout"
+            >
               Log out
             </a>
           </div>
         </div>
 
-        <section className="site-card" aria-label="Verified account summary">
-          <p className="site-card-label">Session summary</p>
-          <h2 className="site-card-title">Signed in as {ctx.user?.username}</h2>
-          <p className="site-card-copy">
-            You have passed the verified-user gate in the worker middleware. From here you can add
-            tables, admin views, or anything else the app should expose after login.
-          </p>
-
-          <dl className="site-metrics">
-            <div>
-              <dt>Email</dt>
-              <dd>{ctx.user?.email ?? "Unavailable"}</dd>
+        <section className={siteCardClass} aria-label="Verified account summary">
+          <p className={kickerClass}>Session summary</p>
+          <h2 className="mt-3.5 mb-0 font-serif text-[clamp(1.8rem,3vw,2.6rem)] leading-[1.05] tracking-[-0.03em]">
+            Signed in as {ctx.user?.username}
+          </h2>
+          <dl className="mt-[26px] grid gap-[18px]">
+            <div className={dlItemClass}>
+              <dt className={kickerClass}>Email</dt>
+              <dd className="mt-2 ml-0 text-[#1f1811] text-[1.02rem] break-words">
+                {ctx.user?.email ?? "Unavailable"}
+              </dd>
             </div>
-            <div>
-              <dt>User ID</dt>
-              <dd>{ctx.user?.id ?? "Unavailable"}</dd>
-            </div>
-            <div>
-              <dt>Verification</dt>
-              <dd>Confirmed</dd>
+            <div className={dlItemClass}>
+              <dt className={kickerClass}>User ID</dt>
+              <dd className="mt-2 ml-0 text-[#1f1811] text-[1.02rem] break-words">
+                {ctx.user?.id ?? "Unavailable"}
+              </dd>
             </div>
           </dl>
         </section>
@@ -129,3 +178,4 @@ export function ProtectedHome({ ctx }: RequestInfo) {
     </main>
   );
 }
+

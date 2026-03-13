@@ -3,6 +3,7 @@ import { RouteMiddleware } from "rwsdk/router";
 import { env } from "cloudflare:workers";
 import { db, setupDb } from "@/db";
 import { sessions, setupSessionStore } from "@/session/store";
+import { ROLES } from "@/app/shared/constants";
 
 export const redirectToLogin = () => {
   return new Response(null, {
@@ -37,6 +38,24 @@ export const loadAuthContext =
         },
       });
       console.log("🔍 FOUND USER");
-    //   console.log(ctx.user);
+    }
+  };
+
+export const requireVerified =
+  (): RouteMiddleware =>
+  ({ ctx }) => {
+    if (!ctx.user || !ctx.user.verified) {
+      return redirectToLogin();
+    }
+  };
+
+export const requireAdmin =
+  (): RouteMiddleware =>
+  ({ ctx }) => {
+    if (!ctx.user || !ctx.user.verified) {
+      return redirectToLogin();
+    }
+    if (ctx.user.role !== ROLES.ADMIN) {
+      return new Response("Forbidden", { status: 403 });
     }
   };

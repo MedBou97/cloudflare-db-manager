@@ -1,0 +1,32 @@
+@import "tailwindcss";
+
+@theme {
+  --color-accent: #1f6a52;
+  --color-accent-strong: #124735;
+  --font-sans: "Inter", "Segoe UI", sans-serif;
+  --font-serif: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif;
+}
+
+html {
+  min-height: 100%;
+  background:
+    radial-gradient(circle at top left, rgba(216, 195, 168, 0.72), transparent 32%),
+    radial-gradient(circle at bottom right, rgba(151, 186, 170, 0.42), transparent 28%),
+    linear-gradient(180deg, #f7f1e9 0%, #f1e9df 100%);
+  font-family: var(--font-sans);
+  color: #1f1811;
+  color-scheme: light;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+a {
+  color: inherit;
+}

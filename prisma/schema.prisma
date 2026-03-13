@@ -16,16 +16,58 @@ datasource db {
 }
 
 model User {
-  id                  String   @id @default(uuid()) // User ID (UUID-based)
-  username            String   @unique
+  id                  String         @id @default(uuid())
+  username            String         @unique
   password            String
-  verificationToken   String? @unique
+  verificationToken   String?        @unique
   verificationExpires DateTime?
-  verified            Boolean @default(false)
-  resetToken          String? @unique
+  verified            Boolean        @default(false)
+  resetToken          String?        @unique
   resetTokenExpires   DateTime?
-  email               String   @unique
-  createdAt           DateTime @default(now())
+  email               String         @unique
+  role                String         @default("USER")
+  createdAt           DateTime       @default(now())
+  vectorRecords       VectorRecord[]
+  auditLogs           AuditLog[]
 
   @@index([username, email, verificationToken, resetToken])
+}
+
+model VectorRecord {
+  id           String   @id @default(uuid())
+  label        String
+  description  String
+  category     String
+  source       String
+  tags         String   @default("[]")
+  numericValue Float
+  confidence   Float
+  vector       String
+  dimension    Int
+  metadata     String   @default("{}")
+  status       String   @default("active")
+  version      Int      @default(1)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @default(now())
+  createdById  String
+  createdBy    User     @relation(fields: [createdById], references: [id])
+
+  @@index([category, status])
+  @@index([createdById])
+  @@index([createdAt])
+}
+
+model AuditLog {
+  id         String   @id @default(uuid())
+  userId     String
+  username   String
+  action     String
+  resourceId String?
+  details    String
+  createdAt  DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([action])
+  @@index([createdAt])
 }
