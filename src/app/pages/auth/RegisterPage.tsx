@@ -38,10 +38,10 @@ const RegisterPage = () => {
       footer={
         <>
           <p>
-            Already have an account? <a href="/login">Sign in</a>
+            Already have an account? <a href="/login"><span className="text-blue-400">Sign in</span></a>
           </p>
           <p>
-            Need to start over later? You can request a new email from <a href="/forgot">account recovery</a>.
+            Need to start over later? You can request a new email from <a href="/forgot"><span className="text-blue-400">account recovery</span></a>.
           </p>
         </>
       }
