@@ -3,6 +3,7 @@ import { db } from "@/db";
 import { AppShell } from "@/app/shared/AppShell";
 import { RecordFilters } from "../records/RecordFilters";
 import { RecordList } from "../records/RecordList";
+import { DeleteDatasetButton } from "./DeleteDatasetButton";
 import { ROLES, RECORDS_PER_PAGE } from "@/app/shared/constants";
 
 export async function DatabaseDetailPage({ ctx, request }: RequestInfo) {
@@ -88,13 +89,13 @@ export async function DatabaseDetailPage({ ctx, request }: RequestInfo) {
   return (
     <AppShell user={ctx.user} currentPath="/databases">
       <div className="mb-7">
-        <div className="border rounded-full px-4 py-1 font-semibold
-         text-sm text-[#8a7767] hover:text-accent-strong mb-3 inline-block">
-        <a
-          href="/databases"
-        >
-          ← Databases
-        </a>
+        <div className="flex items-center justify-between gap-4 flex-wrap mb-3">
+          <div className="border rounded-full px-4 py-1 font-semibold text-sm text-[#8a7767] hover:text-accent-strong inline-block">
+            <a href="/databases">← Databases</a>
+          </div>
+          {isAdmin && (
+            <DeleteDatasetButton datasetId={datasetId} datasetName={dataset.name} />
+          )}
         </div>
         <h1 className="m-0 mb-1.5 font-serif text-[clamp(1.8rem,3vw,2.4rem)] leading-[1.1] tracking-[-0.03em]">
           {dataset.name}

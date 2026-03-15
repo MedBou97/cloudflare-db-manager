@@ -1,0 +1,75 @@
+{
+  "records": [
+    {
+      "label": "Valid record — should pass",
+      "description": "This record is completely valid and should import without issues.",
+      "category": "Test",
+      "source": "Manual",
+      "numericValue": 0.5,
+      "confidence": 0.8,
+      "status": "active",
+      "tags": ["valid", "test"],
+      "metadata": { "note": "control record" },
+      "vector": [0.1, 0.2, 0.3, 0.4]
+    },
+    {
+      "label": "Missing required fields",
+      "description": "no category, no source, no vector — should fail validation"
+    },
+    {
+      "label": "Confidence out of range",
+      "description": "Confidence is 1.5 which is > 1.0 — should fail.",
+      "category": "Test",
+      "source": "Manual",
+      "numericValue": 0.5,
+      "confidence": 1.5,
+      "vector": [0.1, 0.2, 0.3]
+    },
+    {
+      "label": "numericValue is a string",
+      "description": "numericValue should be a number but is provided as a string here.",
+      "category": "Test",
+      "source": "Manual",
+      "numericValue": "not-a-number",
+      "confidence": 0.9,
+      "vector": [0.1, 0.2, 0.3]
+    },
+    {
+      "label": "Empty vector array",
+      "description": "Vector is an empty array — should fail, vectors must be non-empty.",
+      "category": "Test",
+      "source": "Manual",
+      "numericValue": 0.5,
+      "confidence": 0.9,
+      "vector": []
+    },
+    {
+      "label": "Vector contains non-numbers",
+      "description": "Vector has a string element mixed in — should fail validation.",
+      "category": "Test",
+      "source": "Manual",
+      "numericValue": 0.5,
+      "confidence": 0.9,
+      "vector": [0.1, "oops", 0.3, 0.4]
+    },
+    {
+      "label": "Negative confidence",
+      "description": "Confidence is -0.1 — below the 0.0 minimum.",
+      "category": "Test",
+      "source": "Manual",
+      "numericValue": 0.5,
+      "confidence": -0.1,
+      "vector": [0.1, 0.2, 0.3]
+    },
+    {
+      "label": "Another valid record — should pass",
+      "description": "A second valid record to confirm mixed batches still import the good rows… actually the importer should reject the whole batch on any error.",
+      "category": "Test",
+      "source": "Manual",
+      "numericValue": 0.75,
+      "confidence": 1.0,
+      "tags": "single-string-tag",
+      "vector": [0.9, 0.8, 0.7, 0.6]
+    }
+  ]
+}
