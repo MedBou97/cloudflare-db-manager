@@ -35,7 +35,7 @@ export const AppShell = ({ children, user, currentPath = "" }: AppShellProps) =>
 
           {user && (
             <nav className="flex gap-1 flex-1" aria-label="Main navigation">
-              <a href="/records" className={navLinkClass("/records")}>Records</a>
+              <a href="/databases" className={navLinkClass("/databases")}>Databases</a>
               <a href="/logs" className={navLinkClass("/logs")}>Logs</a>
             </nav>
           )}

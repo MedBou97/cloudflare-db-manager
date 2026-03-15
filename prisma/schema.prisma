@@ -29,8 +29,21 @@ model User {
   createdAt           DateTime       @default(now())
   vectorRecords       VectorRecord[]
   auditLogs           AuditLog[]
+  datasets            Dataset[]
 
   @@index([username, email, verificationToken, resetToken])
+}
+
+model Dataset {
+  id           String         @id @default(uuid())
+  name         String
+  description  String         @default("")
+  importedAt   DateTime       @default(now())
+  importedById String?
+  importedBy   User?          @relation(fields: [importedById], references: [id])
+  records      VectorRecord[]
+
+  @@index([importedById])
 }
 
 model VectorRecord {
@@ -51,10 +64,13 @@ model VectorRecord {
   updatedAt    DateTime @default(now())
   createdById  String
   createdBy    User     @relation(fields: [createdById], references: [id])
+  datasetId    String?
+  dataset      Dataset? @relation(fields: [datasetId], references: [id])
 
   @@index([category, status])
   @@index([createdById])
   @@index([createdAt])
+  @@index([datasetId])
 }
 
 model AuditLog {
