@@ -40,98 +40,6 @@ A role-based vector data management application built on **RedwoodSDK** and depl
 - Every create / edit / delete action is written to `AuditLog`
 - Paginated log page with timestamp, action badge, details, and resource chip
 
-## Data Models
-
-```prisma
-model User {
-  id                  String         @id @default(uuid())
-  username            String         @unique
-  email               String         @unique
-  password            String
-  role                String         @default("USER")
-  verified            Boolean        @default(false)
-  verificationToken   String?        @unique
-  verificationExpires DateTime?
-  resetToken          String?        @unique
-  resetTokenExpires   DateTime?
-  createdAt           DateTime       @default(now())
-  vectorRecords       VectorRecord[]
-  auditLogs           AuditLog[]
-}
-
-model VectorRecord {
-  id           String   @id @default(uuid())
-  label        String
-  description  String
-  category     String
-  source       String
-  tags         String   @default("[]")
-  numericValue Float
-  confidence   Float
-  vector       String
-  dimension    Int
-  metadata     String   @default("{}")
-  status       String   @default("active")
-  version      Int      @default(1)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @default(now())
-  createdBy    User     @relation(fields: [createdById], references: [id])
-  createdById  String
-}
-
-model AuditLog {
-  id         String   @id @default(uuid())
-  userId     String
-  username   String
-  action     String
-  resourceId String?
-  details    String
-  createdAt  DateTime @default(now())
-  user       User     @relation(fields: [userId], references: [id])
-}
-```
-
-## Project Structure
-
-```
-src/
-  client.tsx              # Client entry point (imports Tailwind CSS)
-  worker.tsx              # Cloudflare Worker entry, route definitions
-  db.ts                   # Prisma client setup
-  app/
-    Document.tsx          # HTML shell with critical inline CSS (FOUC prevention)
-    headers.ts            # Security headers middleware (HSTS, CSP, etc.)
-    styles.css            # Tailwind v4 entry (@import "tailwindcss", @theme)
-    pages/
-      Home.tsx            # Landing page (guest) + dashboard (authenticated)
-      auth/
-        AuthShell.tsx     # Two-column auth layout
-        LoginPage.tsx
-        RegisterPage.tsx
-        ForgotPage.tsx
-        ResetPage.tsx
-        middleware.ts     # loadAuthContext, requireVerified, requireAdmin
-        routes.ts         # /login /register /forgot /reset /verify /logout
-        actions.ts        # Server actions: login, register, forgot, reset
-      records/
-        RecordsPage.tsx   # Paginated record list with filters
-        RecordCard.tsx    # Single record with inline edit + delete
-        RecordFilters.tsx # Search / filter bar + create form (admin only)
-        RecordList.tsx    # Record list wrapper
-        routes.ts
-      logs/
-        LogsPage.tsx      # Paginated audit log
-        routes.ts
-    shared/
-      AppShell.tsx        # Sticky nav + main layout wrapper
-      constants.ts        # ROLES enum
-      links.ts
-  session/
-    durableObject.ts      # Session Durable Object
-    store.ts              # Session load / save / remove helpers
-  scripts/
-    seed.ts               # Database seed script
-```
 
 ## Styling
 
@@ -165,6 +73,10 @@ A small critical CSS block is inlined in `Document.tsx` to set the background gr
 - A Cloudflare account with Workers and D1 enabled
 
 ### Local Development
+
+currently redwoodsdk isn working properly on windows to a windows path mishandling so the best fix is to switch to linux or use wsl and download vs code wsl extension, and move to the next steps
+here is a video link for setting wsl and ubuntu distro from minute 13:00 ~ 18:00
+- [Setup WSL](https://www.youtube.com/watch?v=Hn4Z3K8kSrM)
 
 ```shell
 pnpm install
