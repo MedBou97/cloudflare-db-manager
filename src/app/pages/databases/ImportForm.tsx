@@ -137,13 +137,21 @@ export function ImportForm() {
           </div>
         )}
 
-        <button
-          type="submit"
-          disabled={pending}
-          className="self-start px-7 py-3 rounded-xl border-0 bg-gradient-to-br from-accent to-accent-strong text-[#f7f8f6] text-sm font-bold cursor-pointer transition-opacity disabled:opacity-70 disabled:cursor-wait"
-        >
-          {pending ? "Importing…" : "Import Dataset"}
-        </button>
+        <div className="flex gap-3">
+          <button
+            type="submit"
+            disabled={pending}
+            className="px-7 py-3 rounded-xl border-0 bg-gradient-to-br from-accent to-accent-strong text-[#f7f8f6] text-sm font-bold cursor-pointer transition-opacity disabled:opacity-70 disabled:cursor-wait"
+          >
+            {pending ? "Importing…" : "Import Dataset"}
+          </button>
+          <a
+            href="/databases"
+            className="px-7 py-3 rounded-xl border border-[rgba(92,73,56,0.2)] bg-transparent text-[#5f5044] text-sm font-bold no-underline transition-colors hover:bg-[rgba(92,73,56,0.06)] hover:border-[rgba(92,73,56,0.35)]"
+          >
+            Cancel
+          </a>
+        </div>
       </form>
     </div>
   );

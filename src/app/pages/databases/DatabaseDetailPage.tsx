@@ -90,8 +90,8 @@ export async function DatabaseDetailPage({ ctx, request }: RequestInfo) {
     <AppShell user={ctx.user} currentPath="/databases">
       <div className="mb-7">
         <div className="flex items-center justify-between gap-4 flex-wrap mb-3">
-          <div className="border rounded-full px-4 py-1 font-semibold text-sm text-[#8a7767] hover:text-accent-strong inline-block">
-            <a href="/databases">← Databases</a>
+          <div className="border rounded-full font-semibold text-sm text-[#8a7767] hover:text-accent-strong inline-block">
+            <a href="/databases" className="block px-4 py-1">← Databases</a>
           </div>
           {isAdmin && (
             <DeleteDatasetButton datasetId={datasetId} datasetName={dataset.name} />
