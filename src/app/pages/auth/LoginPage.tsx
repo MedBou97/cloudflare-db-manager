@@ -27,10 +27,10 @@ const LoginPage = () => {
       footer={
         <>
           <p>
-            Need an account? <a href="/register">Create one</a>
+            Need an account? <a href="/register"> <span className="text-blue-400">Create one</span></a>
           </p>
           <p>
-            Forgot your password? <a href="/forgot">Reset it</a>
+            Forgot your password? <a href="/forgot"><span className="text-blue-400">Reset it</span></a>
           </p>
         </>
       }

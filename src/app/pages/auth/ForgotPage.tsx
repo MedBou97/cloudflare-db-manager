@@ -35,10 +35,10 @@ const ForgotPage = () => {
       footer={
         <>
           <p>
-            Remembered your password? <a href="/login">Back to sign in</a>
+            Remembered your password? <a href="/login"><span className="text-blue-400">Back to sign in</span></a>
           </p>
           <p>
-            Need a new account instead? <a href="/register">Create one here</a>
+            Need a new account instead? <a href="/register"><span className="text-blue-400">Create one here</span></a>
           </p>
         </>
       }

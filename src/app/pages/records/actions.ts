@@ -114,6 +114,7 @@ export async function createRecord(formData: FormData) {
   const vectorRaw = (formData.get("vector") as string)?.trim();
   const metadataRaw = (formData.get("metadata") as string)?.trim() || "{}";
   const status = (formData.get("status") as string)?.trim() || "active";
+  const datasetId = (formData.get("datasetId") as string)?.trim() || null;
 
   if (!label || !description || !category || !source) {
     return { error: "Label, description, category, and source are required." };
@@ -173,6 +174,7 @@ export async function createRecord(formData: FormData) {
         status,
         version: 1,
         createdById: ctx.user.id,
+        datasetId,
       },
     });
   } catch (e) {

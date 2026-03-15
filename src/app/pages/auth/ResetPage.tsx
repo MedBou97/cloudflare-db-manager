@@ -1,8 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { handleResetPassword } from "./actions";
-import { RequestInfo } from "rwsdk/worker";
 import {
   AuthField,
   AuthShell,
@@ -10,12 +9,14 @@ import {
   AuthSubmitButton,
 } from "./AuthShell";
 
-const ResetPage = ({ request }: RequestInfo) => {
+const ResetPage = () => {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+  const [token, setToken] = useState("");
 
-  const url = new URL(request.url);
-  const token = url.searchParams.get("token") ?? "";
+  useEffect(() => {
+    setToken(new URL(window.location.href).searchParams.get("token") ?? "");
+  }, []);
 
   const handleSubmit = async (formData: FormData) => {
     setError(null);
@@ -41,10 +42,10 @@ const ResetPage = ({ request }: RequestInfo) => {
       footer={
         <>
           <p>
-            Need a fresh reset email? <a href="/forgot">Request another link</a>
+            Need a fresh reset email? <a href="/forgot"><span className="text-blue-400">Reset it</span></a>Request another link
           </p>
           <p>
-            Back to your account? <a href="/login">Return to sign in</a>
+            Back to your account? <a href="/login"><span className="text-blue-400">Return to sign in</span></a>
           </p>
         </>
       }

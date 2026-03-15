@@ -24,14 +24,14 @@ export function Home({ ctx }: RequestInfo) {
 
         <div className="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-5">
           <a
-            href="/records"
+            href="/databases"
             className="block p-7 border border-[rgba(86,67,48,0.12)] rounded-3xl bg-[rgba(255,252,247,0.82)] shadow-[0_8px_24px_rgba(76,56,34,0.08)] no-underline text-inherit transition-[transform,box-shadow] duration-150 hover:-translate-y-0.5 hover:shadow-[0_16px_40px_rgba(76,56,34,0.13)]"
           >
-            <div className="text-[2rem] leading-none mb-3.5">⬡</div>
-            <h2 className="m-0 mb-2 text-[1.2rem] font-bold text-[#1f1811]">Records</h2>
+            <div className="text-[2rem] leading-none mb-3.5">🗄️</div>
+            <h2 className="m-0 mb-2 text-[1.2rem] font-bold text-[#1f1811]">Databases</h2>
             <p className="m-0 text-sm text-[#5f5044] leading-[1.6]">
-              Browse, search, filter, and sort vector data entries. Expand any record to see full
-              details including the raw vector and metadata.
+              Browse imported vector datasets, search and filter records, or import a new JSON
+              dataset with structural validation.
             </p>
           </a>
 

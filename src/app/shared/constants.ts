@@ -17,6 +17,8 @@ export const AUDIT_ACTIONS = Object.freeze({
   EDIT_RECORD: "EDIT_RECORD",
   DELETE_RECORD: "DELETE_RECORD",
   VIEW_LOGS: "VIEW_LOGS",
+  IMPORT_DATASET: "IMPORT_DATASET",
+  DELETE_DATASET: "DELETE_DATASET",
 } as const);
 
 export type AuditAction = (typeof AUDIT_ACTIONS)[keyof typeof AUDIT_ACTIONS];
