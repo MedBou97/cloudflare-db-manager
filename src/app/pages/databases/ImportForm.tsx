@@ -3,9 +3,9 @@
 import { useState, useTransition, useRef } from "react";
 import { importDataset } from "./actions";
 
-const fieldLabelClass = "text-[0.72rem] font-bold tracking-[0.1em] uppercase text-[#8a7767]";
+const fieldLabelClass = "text-[0.72rem] font-bold tracking-[0.1em] uppercase text-[var(--c-text-muted)]";
 const fieldInputClass =
-  "w-full px-3.5 py-3 border border-[rgba(92,73,56,0.16)] rounded-xl bg-[rgba(255,255,255,0.8)] text-[#1f1811] text-sm outline-none transition-[border-color,box-shadow] focus:border-[rgba(31,106,82,0.4)] focus:shadow-[0_0_0_3px_rgba(31,106,82,0.35)]";
+  "w-full px-3.5 py-3 border border-[var(--c-border-input)] rounded-xl bg-[var(--c-bg-input)] text-[var(--c-text)] text-sm outline-none transition-[border-color,box-shadow] focus:border-[var(--c-accent-focus)] focus:shadow-[0_0_0_3px_var(--c-accent-ring)]";
 
 export function ImportForm() {
   const [pending, startTransition] = useTransition();
@@ -60,7 +60,7 @@ export function ImportForm() {
     <div className="max-w-[640px]">
       <form
         onSubmit={handleSubmit}
-        className="p-7 border border-[rgba(86,67,48,0.12)] rounded-3xl bg-[rgba(255,252,247,0.82)] shadow-[0_4px_16px_rgba(76,56,34,0.07)] flex flex-col gap-5"
+        className="p-7 border border-[var(--c-border)] rounded-3xl bg-[var(--c-bg-card)] shadow-[0_4px_16px_var(--c-shadow-sm)] flex flex-col gap-5"
       >
         <div className="flex flex-col gap-1.5">
           <label className={fieldLabelClass} htmlFor="import-name">
@@ -81,7 +81,7 @@ export function ImportForm() {
           </label>
           <textarea
             id="import-desc"
-            className="w-full px-3.5 py-3 border border-[rgba(92,73,56,0.16)] rounded-xl bg-[rgba(255,255,255,0.8)] text-[#1f1811] text-sm outline-none resize-y min-h-[80px] transition-[border-color,box-shadow] focus:border-[rgba(31,106,82,0.4)] focus:shadow-[0_0_0_3px_rgba(31,106,82,0.35)]"
+            className="w-full px-3.5 py-3 border border-[var(--c-border-input)] rounded-xl bg-[var(--c-bg-input)] text-[var(--c-text)] text-sm outline-none resize-y min-h-[80px] transition-[border-color,box-shadow] focus:border-[var(--c-accent-focus)] focus:shadow-[0_0_0_3px_var(--c-accent-ring)]"
             name="description"
             placeholder="Optional description of this dataset"
             rows={3}
@@ -90,7 +90,7 @@ export function ImportForm() {
 
         <div className="flex flex-col gap-1.5">
           <span className={fieldLabelClass}>JSON File *</span>
-          <label className="flex items-center gap-3 px-4 py-3 border-2 border-dashed border-[rgba(92,73,56,0.2)] rounded-xl cursor-pointer transition-colors hover:border-[rgba(31,106,82,0.35)] hover:bg-[rgba(31,106,82,0.04)]">
+          <label className="flex items-center gap-3 px-4 py-3 border-2 border-dashed border-[var(--c-dashed)] rounded-xl cursor-pointer transition-colors hover:border-[var(--c-accent-ring)] hover:bg-[var(--c-accent-bg)]">
             <input
               type="file"
               accept=".json,application/json"
@@ -98,38 +98,38 @@ export function ImportForm() {
               onChange={handleFileChange}
             />
             <span className="text-xl">📂</span>
-            <span className="text-sm text-[#5f5044]">
+            <span className="text-sm text-[var(--c-text-secondary)]">
               {fileName ?? "Choose a .json file…"}
             </span>
           </label>
-          <p className="m-0 text-[0.78rem] text-[#8a7767]">
+          <p className="m-0 text-[0.78rem] text-[var(--c-text-muted)]">
             Expected format:{" "}
-            <code className="font-mono bg-[rgba(92,73,56,0.06)] px-1 rounded">
+            <code className="font-mono bg-[var(--c-bg-code)] px-1 rounded">
               {"{ \"records\": [{ label, description, category, source, numericValue, confidence, vector, … }] }"}
             </code>
           </p>
         </div>
 
         {error && (
-          <p className="px-4 py-3 rounded-xl bg-[rgba(159,54,38,0.1)] border border-[rgba(159,54,38,0.2)] text-[#7c271b] text-sm m-0">
+          <p className="px-4 py-3 rounded-xl bg-[var(--c-danger-bg)] border border-[var(--c-danger-border)] text-[var(--c-danger-text)] text-sm m-0">
             {error}
           </p>
         )}
 
         {validationErrors.length > 0 && (
-          <div className="px-4 py-3 rounded-xl bg-[rgba(159,54,38,0.08)] border border-[rgba(159,54,38,0.16)]">
-            <p className="m-0 mb-2 text-[#7c271b] text-sm font-semibold">
+          <div className="px-4 py-3 rounded-xl bg-[var(--c-danger-bg)] border border-[var(--c-danger-border)]">
+            <p className="m-0 mb-2 text-[var(--c-danger-text)] text-sm font-semibold">
               {validationErrors.length} validation error{validationErrors.length !== 1 ? "s" : ""} — fix before importing:
             </p>
             <ul className="m-0 pl-4 flex flex-col gap-1">
               {validationErrors.slice(0, 20).map((err, i) => (
-                <li key={i} className="text-[0.8rem] text-[#7c271b]">
+                <li key={i} className="text-[0.8rem] text-[var(--c-danger-text)]">
                   Row {err.row} ·{" "}
                   <span className="font-mono">{err.field}</span>: {err.message}
                 </li>
               ))}
               {validationErrors.length > 20 && (
-                <li className="text-[0.8rem] text-[#8a7767] italic">
+                <li className="text-[0.8rem] text-[var(--c-text-muted)] italic">
                   …and {validationErrors.length - 20} more
                 </li>
               )}
@@ -141,13 +141,13 @@ export function ImportForm() {
           <button
             type="submit"
             disabled={pending}
-            className="px-7 py-3 rounded-xl border-0 bg-gradient-to-br from-accent to-accent-strong text-[#f7f8f6] text-sm font-bold cursor-pointer transition-opacity disabled:opacity-70 disabled:cursor-wait"
+            className="px-7 py-3 rounded-xl border-0 bg-gradient-to-br from-accent to-accent-strong text-[var(--c-text-on-accent)] text-sm font-bold cursor-pointer transition-opacity disabled:opacity-70 disabled:cursor-wait"
           >
             {pending ? "Importing…" : "Import Dataset"}
           </button>
           <a
             href="/databases"
-            className="px-7 py-3 rounded-xl border border-[rgba(92,73,56,0.2)] bg-transparent text-[#5f5044] text-sm font-bold no-underline transition-colors hover:bg-[rgba(92,73,56,0.06)] hover:border-[rgba(92,73,56,0.35)]"
+            className="px-7 py-3 rounded-xl border border-[var(--c-dashed)] bg-transparent text-[var(--c-text-secondary)] text-sm font-bold no-underline transition-colors hover:bg-[var(--c-bg-code)] hover:border-[var(--c-border-input-hover)]"
           >
             Cancel
           </a>
