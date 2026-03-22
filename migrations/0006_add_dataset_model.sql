@@ -21,7 +21,7 @@ CREATE INDEX "VectorRecord_datasetId_idx" ON "VectorRecord"("datasetId");
 INSERT INTO "Dataset" ("id", "name", "description", "importedAt")
 VALUES (
     '00000000-0000-0000-0000-000000000001',
-    'Default',
+    'Default Dataset',
     'Auto-created dataset for records that existed before the Datasets feature was introduced.',
     datetime('now')
 );

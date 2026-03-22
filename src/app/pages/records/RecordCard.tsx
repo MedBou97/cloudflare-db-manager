@@ -56,20 +56,20 @@ function formatDate(d: Date | string) {
 }
 
 function getStatusBadgeClass(status: string): string {
-  if (status === "active") return "bg-[rgba(31,106,82,0.12)] text-[#15523f]";
-  if (status === "inactive") return "bg-[rgba(92,73,56,0.1)] text-[#8a7767]";
-  return "bg-[rgba(160,100,30,0.12)] text-[#7a4e10]";
+  if (status === "active") return "bg-[var(--c-success-bg)] text-[var(--c-success-text)]";
+  if (status === "inactive") return "bg-[var(--c-bar-bg)] text-[var(--c-text-muted)]";
+  return "bg-[var(--c-warning-bg)] text-[var(--c-warning-text)]";
 }
 
-const fieldLabelClass = "text-[0.72rem] font-bold tracking-[0.1em] uppercase text-[#8a7767]";
+const fieldLabelClass = "text-[0.72rem] font-bold tracking-[0.1em] uppercase text-[var(--c-text-muted)]";
 const fieldInputClass =
-  "w-full px-2.5 py-1.5 border border-[rgba(92,73,56,0.16)] rounded-lg bg-[rgba(255,255,255,0.8)] text-[#1f1811] text-sm outline-none transition-[border-color,box-shadow] focus:border-[rgba(31,106,82,0.4)] focus:shadow-[0_0_0_3px_rgba(31,106,82,0.35)]";
+  "w-full px-2.5 py-1.5 border border-[var(--c-border-input)] rounded-lg bg-[var(--c-bg-input)] text-[var(--c-text)] text-sm outline-none transition-[border-color,box-shadow] focus:border-[var(--c-accent-focus)] focus:shadow-[0_0_0_3px_var(--c-accent-ring)]";
 const fieldTextareaClass =
-  "w-full px-2.5 py-2 border border-[rgba(92,73,56,0.16)] rounded-lg bg-[rgba(255,255,255,0.8)] text-[#1f1811] font-mono text-[0.8rem] outline-none resize-y min-h-[80px] transition-[border-color,box-shadow] focus:border-[rgba(31,106,82,0.4)] focus:shadow-[0_0_0_3px_rgba(31,106,82,0.35)]";
+  "w-full px-2.5 py-2 border border-[var(--c-border-input)] rounded-lg bg-[var(--c-bg-input)] text-[var(--c-text)] font-mono text-[0.8rem] outline-none resize-y min-h-[80px] transition-[border-color,box-shadow] focus:border-[var(--c-accent-focus)] focus:shadow-[0_0_0_3px_var(--c-accent-ring)]";
 const fieldSelectClass =
-  "w-full px-2.5 py-1.5 border border-[rgba(92,73,56,0.16)] rounded-lg bg-[rgba(255,255,255,0.8)] text-[#1f1811] text-sm cursor-pointer outline-none";
+  "w-full px-2.5 py-1.5 border border-[var(--c-border-input)] rounded-lg bg-[var(--c-bg-input)] text-[var(--c-text)] text-sm cursor-pointer outline-none";
 const cancelBtnClass =
-  "px-5 py-2.5 rounded-xl border border-[rgba(92,73,56,0.16)] bg-[rgba(255,255,255,0.6)] text-[#5f5044] text-sm font-semibold cursor-pointer transition-colors hover:bg-[rgba(255,255,255,0.9)]";
+  "px-5 py-2.5 rounded-xl border border-[var(--c-border-input)] bg-[var(--c-bg-cancel-btn)] text-[var(--c-text-secondary)] text-sm font-semibold cursor-pointer transition-colors hover:bg-[var(--c-bg-input)]";
 
 export function RecordCard({ record, isAdmin, onDeleted, onUpdated }: RecordCardProps) {
   const [expanded, setExpanded] = useState(false);
@@ -169,17 +169,17 @@ export function RecordCard({ record, isAdmin, onDeleted, onUpdated }: RecordCard
   return (
     <>
       <article
-        className={`border rounded-[20px] bg-[rgba(255,252,247,0.82)] overflow-hidden transition-shadow ${
+        className={`border rounded-[20px] bg-[var(--c-bg-card)] overflow-hidden transition-shadow ${
           editing
-            ? "border-[rgba(31,106,82,0.35)] shadow-[0_0_0_3px_rgba(31,106,82,0.12),0_8px_28px_rgba(76,56,34,0.12)]"
-            : "border-[rgba(86,67,48,0.12)] shadow-[0_4px_16px_rgba(76,56,34,0.07)] hover:shadow-[0_8px_28px_rgba(76,56,34,0.12)]"
+            ? "border-[var(--c-accent-ring)] shadow-[0_0_0_3px_var(--c-accent-bg-active),0_8px_28px_var(--c-shadow-hover)]"
+            : "border-[var(--c-border)] shadow-[0_4px_16px_var(--c-shadow-sm)] hover:shadow-[0_8px_28px_var(--c-shadow-hover)]"
         }`}
       >
         {/* ── Summary ── */}
         <div className="p-5 px-6">
           <div className="flex items-start gap-3 mb-4 flex-wrap">
             <span
-              className="inline-flex items-center px-2.5 py-0.5 rounded-full bg-[rgba(92,73,56,0.08)] font-mono text-[0.72rem] text-[#8a7767] shrink-0"
+              className="inline-flex items-center px-2.5 py-0.5 rounded-full bg-[var(--c-tag-bg)] font-mono text-[0.72rem] text-[var(--c-text-muted)] shrink-0"
               title={record.id}
             >
               #{record.id.slice(0, 8)}
@@ -192,7 +192,7 @@ export function RecordCard({ record, isAdmin, onDeleted, onUpdated }: RecordCard
                 placeholder="Label"
               />
             ) : (
-              <h3 className="flex-1 m-0 text-[1.05rem] font-bold text-[#1f1811] leading-[1.35]">
+              <h3 className="flex-1 m-0 text-[1.05rem] font-bold text-[var(--c-text)] leading-[1.35]">
                 {record.label}
               </h3>
             )}
@@ -201,8 +201,8 @@ export function RecordCard({ record, isAdmin, onDeleted, onUpdated }: RecordCard
                 <button
                   className={`flex items-center justify-center w-8 h-8 rounded-lg border cursor-pointer text-sm transition-[background,border-color,color] ${
                     editing
-                      ? "bg-[rgba(31,106,82,0.12)] border-[rgba(31,106,82,0.3)] text-accent-strong"
-                      : "border-[rgba(92,73,56,0.16)] bg-[rgba(255,255,255,0.6)] text-[#8a7767] hover:bg-[rgba(31,106,82,0.08)] hover:border-[rgba(31,106,82,0.25)] hover:text-accent-strong"
+                      ? "bg-[var(--c-accent-bg-active)] border-[var(--c-accent-border)] text-accent-strong"
+                      : "border-[var(--c-border-input)] bg-[var(--c-bg-cancel-btn)] text-[var(--c-text-muted)] hover:bg-[var(--c-accent-bg)] hover:border-[var(--c-accent-border)] hover:text-accent-strong"
                   }`}
                   title="Edit record"
                   onClick={handleEdit}
@@ -212,7 +212,7 @@ export function RecordCard({ record, isAdmin, onDeleted, onUpdated }: RecordCard
                   ✏️
                 </button>
                 <button
-                  className="flex items-center justify-center w-8 h-8 rounded-lg border border-[rgba(92,73,56,0.16)] bg-[rgba(255,255,255,0.6)] cursor-pointer text-sm transition-[background,border-color,color] text-[#8a7767] hover:bg-[rgba(159,54,38,0.1)] hover:border-[rgba(159,54,38,0.2)] hover:text-[#7c271b]"
+                  className="flex items-center justify-center w-8 h-8 rounded-lg border border-[var(--c-border-input)] bg-[var(--c-bg-cancel-btn)] cursor-pointer text-sm transition-[background,border-color,color] text-[var(--c-text-muted)] hover:bg-[var(--c-danger-bg)] hover:border-[var(--c-danger-border)] hover:text-[var(--c-danger-text)]"
                   title="Delete record"
                   onClick={() => setShowConfirm(true)}
                   aria-label="Delete record"
@@ -230,7 +230,7 @@ export function RecordCard({ record, isAdmin, onDeleted, onUpdated }: RecordCard
               {editing ? (
                 <input className={fieldInputClass} value={editCategory} onChange={(e) => setEditCategory(e.target.value)} />
               ) : (
-                <span className="text-[0.9rem] text-[#1f1811] break-words">{record.category}</span>
+                <span className="text-[0.9rem] text-[var(--c-text)] break-words">{record.category}</span>
               )}
             </div>
 
@@ -254,7 +254,7 @@ export function RecordCard({ record, isAdmin, onDeleted, onUpdated }: RecordCard
               {editing ? (
                 <input className={fieldInputClass} type="number" step="any" value={editNumericValue} onChange={(e) => setEditNumericValue(e.target.value)} />
               ) : (
-                <span className="text-[0.9rem] text-[#1f1811] break-words">{record.numericValue.toFixed(4)}</span>
+                <span className="text-[0.9rem] text-[var(--c-text)] break-words">{record.numericValue.toFixed(4)}</span>
               )}
             </div>
 
@@ -264,37 +264,37 @@ export function RecordCard({ record, isAdmin, onDeleted, onUpdated }: RecordCard
                 <input className={fieldInputClass} type="number" step="0.01" min="0" max="1" value={editConfidence} onChange={(e) => setEditConfidence(e.target.value)} />
               ) : (
                 <div className="flex flex-col gap-1">
-                  <div className="h-1.5 rounded-full bg-[rgba(92,73,56,0.1)] overflow-hidden">
+                  <div className="h-1.5 rounded-full bg-[var(--c-bar-bg)] overflow-hidden">
                     <div
                       className="h-full rounded-full bg-gradient-to-r from-accent to-accent-strong"
                       style={{ width: `${Math.min(100, record.confidence * 100).toFixed(1)}%` }}
                     />
                   </div>
-                  <span className="text-[0.8rem] text-[#5f5044]">{(record.confidence * 100).toFixed(1)}%</span>
+                  <span className="text-[0.8rem] text-[var(--c-text-secondary)]">{(record.confidence * 100).toFixed(1)}%</span>
                 </div>
               )}
             </div>
 
             <div className="flex flex-col gap-1">
               <span className={fieldLabelClass}>Dimensions</span>
-              <span className="text-[0.9rem] text-[#1f1811] break-words">{record.dimension.toLocaleString()}</span>
+              <span className="text-[0.9rem] text-[var(--c-text)] break-words">{record.dimension.toLocaleString()}</span>
             </div>
 
             <div className="flex flex-col gap-1">
               <span className={fieldLabelClass}>Version</span>
-              <span className="text-[0.9rem] text-[#1f1811] break-words">v{record.version}</span>
+              <span className="text-[0.9rem] text-[var(--c-text)] break-words">v{record.version}</span>
             </div>
 
             <div className="flex flex-col gap-1 col-span-full">
               <span className={fieldLabelClass}>Vector Preview</span>
               <div className="flex flex-wrap gap-[5px] items-center">
                 {preview.map((v, i) => (
-                  <span key={i} className="px-2 py-0.5 rounded bg-[rgba(31,106,82,0.07)] font-mono text-[0.72rem] text-accent-strong">
+                  <span key={i} className="px-2 py-0.5 rounded bg-[var(--c-accent-vector)] font-mono text-[0.72rem] text-accent-strong">
                     {v.toFixed(4)}
                   </span>
                 ))}
                 {vectorValues.length > VECTOR_PREVIEW_LENGTH && (
-                  <span className="text-[0.78rem] text-[#8a7767] italic">
+                  <span className="text-[0.78rem] text-[var(--c-text-muted)] italic">
                     … [{record.dimension.toLocaleString()} dims]
                   </span>
                 )}
@@ -304,8 +304,8 @@ export function RecordCard({ record, isAdmin, onDeleted, onUpdated }: RecordCard
 
           {/* ── Expand toggle ── */}
           <button
-            className="flex items-center gap-1.5 mt-4 pt-2 w-full text-left bg-transparent text-[#8a7767] text-[0.8rem] font-semibold cursor-pointer transition-colors hover:text-accent-strong"
-            style={{ border: "none", borderTop: "1px solid rgba(86,67,48,0.12)" }}
+            className="flex items-center gap-1.5 mt-4 pt-2 w-full text-left bg-transparent text-[var(--c-text-muted)] text-[0.8rem] font-semibold cursor-pointer transition-colors hover:text-accent-strong"
+            style={{ border: "none", borderTop: "1px solid var(--c-border)" }}
             onClick={() => setExpanded((p) => !p)}
             aria-expanded={expanded}
           >
@@ -315,14 +315,14 @@ export function RecordCard({ record, isAdmin, onDeleted, onUpdated }: RecordCard
 
         {/* ── Expanded detail section ── */}
         {expanded && (
-          <div className="border-t border-[rgba(86,67,48,0.12)] p-5 px-6 bg-[rgba(255,255,255,0.3)]">
+          <div className="border-t border-[var(--c-border)] p-5 px-6 bg-[var(--c-bg-expanded)]">
             <div className="grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4">
               <div className="flex flex-col gap-1 col-span-full">
                 <span className={fieldLabelClass}>Description</span>
                 {editing ? (
                   <textarea className={fieldTextareaClass} value={editDescription} onChange={(e) => setEditDescription(e.target.value)} rows={3} />
                 ) : (
-                  <p className="text-sm text-[#5f5044] break-words leading-[1.55] m-0">{record.description}</p>
+                  <p className="text-sm text-[var(--c-text-secondary)] break-words leading-[1.55] m-0">{record.description}</p>
                 )}
               </div>
 
@@ -331,7 +331,7 @@ export function RecordCard({ record, isAdmin, onDeleted, onUpdated }: RecordCard
                 {editing ? (
                   <input className={fieldInputClass} value={editSource} onChange={(e) => setEditSource(e.target.value)} />
                 ) : (
-                  <span className="text-sm text-[#5f5044] break-words leading-[1.55]">{record.source}</span>
+                  <span className="text-sm text-[var(--c-text-secondary)] break-words leading-[1.55]">{record.source}</span>
                 )}
               </div>
 
@@ -347,25 +347,25 @@ export function RecordCard({ record, isAdmin, onDeleted, onUpdated }: RecordCard
                 ) : (
                   <div className="flex flex-wrap gap-[5px]">
                     {tags.length > 0 ? tags.map((t) => (
-                      <span key={t} className="px-2.5 py-0.5 rounded-full bg-[rgba(92,73,56,0.08)] text-[0.75rem] text-[#5f5044]">{t}</span>
-                    )) : <span className="text-sm text-[#5f5044] leading-[1.55]">—</span>}
+                      <span key={t} className="px-2.5 py-0.5 rounded-full bg-[var(--c-tag-bg)] text-[0.75rem] text-[var(--c-text-secondary)]">{t}</span>
+                    )) : <span className="text-sm text-[var(--c-text-secondary)] leading-[1.55]">—</span>}
                   </div>
                 )}
               </div>
 
               <div className="flex flex-col gap-1">
                 <span className={fieldLabelClass}>Created by</span>
-                <span className="text-sm text-[#5f5044] leading-[1.55]">{record.createdBy.username}</span>
+                <span className="text-sm text-[var(--c-text-secondary)] leading-[1.55]">{record.createdBy.username}</span>
               </div>
 
               <div className="flex flex-col gap-1">
                 <span className={fieldLabelClass}>Created at</span>
-                <span className="text-sm text-[#5f5044] leading-[1.55]">{formatDate(record.createdAt)}</span>
+                <span className="text-sm text-[var(--c-text-secondary)] leading-[1.55]">{formatDate(record.createdAt)}</span>
               </div>
 
               <div className="flex flex-col gap-1">
                 <span className={fieldLabelClass}>Updated at</span>
-                <span className="text-sm text-[#5f5044] leading-[1.55]">{formatDate(record.updatedAt)}</span>
+                <span className="text-sm text-[var(--c-text-secondary)] leading-[1.55]">{formatDate(record.updatedAt)}</span>
               </div>
 
               <div className="flex flex-col gap-1 col-span-full">
@@ -373,7 +373,7 @@ export function RecordCard({ record, isAdmin, onDeleted, onUpdated }: RecordCard
                 {editing ? (
                   <textarea className={fieldTextareaClass} value={editMetadata} onChange={(e) => setEditMetadata(e.target.value)} rows={4} />
                 ) : (
-                  <pre className="font-mono text-[0.78rem] bg-[rgba(92,73,56,0.06)] p-2.5 rounded-lg whitespace-pre-wrap break-all max-h-[180px] overflow-y-auto m-0">
+                  <pre className="font-mono text-[0.78rem] bg-[var(--c-bg-code)] p-2.5 rounded-lg whitespace-pre-wrap break-all max-h-[180px] overflow-y-auto m-0">
                     {JSON.stringify(JSON.parse(record.metadata), null, 2)}
                   </pre>
                 )}
@@ -384,7 +384,7 @@ export function RecordCard({ record, isAdmin, onDeleted, onUpdated }: RecordCard
                 {editing ? (
                   <textarea className={fieldTextareaClass} value={editVector} onChange={(e) => setEditVector(e.target.value)} rows={6} />
                 ) : (
-                  <pre className="font-mono text-[0.78rem] bg-[rgba(92,73,56,0.06)] p-2.5 rounded-lg whitespace-pre-wrap break-all max-h-[180px] overflow-y-auto m-0">
+                  <pre className="font-mono text-[0.78rem] bg-[var(--c-bg-code)] p-2.5 rounded-lg whitespace-pre-wrap break-all max-h-[180px] overflow-y-auto m-0">
                     {record.vector}
                   </pre>
                 )}
@@ -395,13 +395,13 @@ export function RecordCard({ record, isAdmin, onDeleted, onUpdated }: RecordCard
             {editing && (
               <>
                 {error && (
-                  <p className="px-3.5 py-2.5 rounded-[10px] bg-[rgba(159,54,38,0.1)] border border-[rgba(159,54,38,0.2)] text-[#7c271b] text-sm mt-3">
+                  <p className="px-3.5 py-2.5 rounded-[10px] bg-[var(--c-danger-bg)] border border-[var(--c-danger-border)] text-[var(--c-danger-text)] text-sm mt-3">
                     {error}
                   </p>
                 )}
-                <div className="flex gap-2.5 mt-5 pt-4 border-t border-[rgba(86,67,48,0.12)]">
+                <div className="flex gap-2.5 mt-5 pt-4 border-t border-[var(--c-border)]">
                   <button
-                    className="px-5 py-2.5 rounded-xl border-0 bg-gradient-to-br from-accent to-accent-strong text-[#f7f8f6] text-sm font-bold cursor-pointer transition-opacity disabled:opacity-70 disabled:cursor-wait"
+                    className="px-5 py-2.5 rounded-xl border-0 bg-gradient-to-br from-accent to-accent-strong text-[var(--c-text-on-accent)] text-sm font-bold cursor-pointer transition-opacity disabled:opacity-70 disabled:cursor-wait"
                     onClick={handleSave}
                     disabled={saving}
                   >
@@ -420,27 +420,27 @@ export function RecordCard({ record, isAdmin, onDeleted, onUpdated }: RecordCard
       {/* ── Delete confirmation overlay ── */}
       {showConfirm && (
         <div
-          className="fixed inset-0 bg-[rgba(31,24,17,0.5)] flex items-center justify-center z-[200] p-6"
+          className="fixed inset-0 bg-[var(--c-bg-overlay)] flex items-center justify-center z-[200] p-6"
           role="dialog"
           aria-modal="true"
           aria-labelledby="confirm-title"
         >
-          <div className="max-w-sm w-full p-7 rounded-3xl bg-[rgba(255,252,247,0.82)] border border-[rgba(86,67,48,0.12)] shadow-[0_40px_80px_rgba(31,24,17,0.3)] backdrop-blur-[18px]">
+          <div className="max-w-sm w-full p-7 rounded-3xl bg-[var(--c-bg-card)] border border-[var(--c-border)] shadow-[0_40px_80px_rgba(31,24,17,0.3)] backdrop-blur-[18px]">
             <h3 id="confirm-title" className="m-0 mb-2.5 text-[1.15rem] font-bold">
               Delete record?
             </h3>
-            <p className="mt-0 mb-5 text-[#5f5044] text-[0.9rem] leading-[1.6]">
+            <p className="mt-0 mb-5 text-[var(--c-text-secondary)] text-[0.9rem] leading-[1.6]">
               Are you sure you want to delete <strong>{record.label}</strong>? This action cannot be
               undone.
             </p>
             {error && (
-              <p className="px-3.5 py-2.5 rounded-[10px] bg-[rgba(159,54,38,0.1)] border border-[rgba(159,54,38,0.2)] text-[#7c271b] text-sm mt-3">
+              <p className="px-3.5 py-2.5 rounded-[10px] bg-[var(--c-danger-bg)] border border-[var(--c-danger-border)] text-[var(--c-danger-text)] text-sm mt-3">
                 {error}
               </p>
             )}
             <div className="flex gap-2.5">
               <button
-                className="px-5 py-2.5 rounded-xl border-0 bg-[#9f3626] text-white text-sm font-bold cursor-pointer disabled:opacity-70 disabled:cursor-wait"
+                className="px-5 py-2.5 rounded-xl border-0 bg-[var(--c-danger-confirm)] text-white text-sm font-bold cursor-pointer disabled:opacity-70 disabled:cursor-wait"
                 onClick={handleDelete}
                 disabled={deleting}
               >

@@ -21,15 +21,15 @@ type CreateCardProps = {
   datasetId?: string;
 };
 
-const fieldLabelClass = "text-[0.72rem] font-bold tracking-[0.1em] uppercase text-[#8a7767]";
+const fieldLabelClass = "text-[0.72rem] font-bold tracking-[0.1em] uppercase text-[var(--c-text-muted)]";
 const fieldInputClass =
-  "w-full px-2.5 py-1.5 border border-[rgba(92,73,56,0.16)] rounded-lg bg-[rgba(255,255,255,0.8)] text-[#1f1811] text-sm outline-none transition-[border-color,box-shadow] focus:border-[rgba(31,106,82,0.4)] focus:shadow-[0_0_0_3px_rgba(31,106,82,0.35)]";
+  "w-full px-2.5 py-1.5 border border-[var(--c-border-input)] rounded-lg bg-[var(--c-bg-input)] text-[var(--c-text)] text-sm outline-none transition-[border-color,box-shadow] focus:border-[var(--c-accent-focus)] focus:shadow-[0_0_0_3px_var(--c-accent-ring)]";
 const fieldTextareaClass =
-  "w-full px-2.5 py-2 border border-[rgba(92,73,56,0.16)] rounded-lg bg-[rgba(255,255,255,0.8)] text-[#1f1811] font-mono text-[0.8rem] outline-none resize-y min-h-[80px] transition-[border-color,box-shadow] focus:border-[rgba(31,106,82,0.4)] focus:shadow-[0_0_0_3px_rgba(31,106,82,0.35)]";
+  "w-full px-2.5 py-2 border border-[var(--c-border-input)] rounded-lg bg-[var(--c-bg-input)] text-[var(--c-text)] font-mono text-[0.8rem] outline-none resize-y min-h-[80px] transition-[border-color,box-shadow] focus:border-[var(--c-accent-focus)] focus:shadow-[0_0_0_3px_var(--c-accent-ring)]";
 const fieldSelectClass =
-  "w-full px-2.5 py-1.5 border border-[rgba(92,73,56,0.16)] rounded-lg bg-[rgba(255,255,255,0.8)] text-[#1f1811] text-sm cursor-pointer outline-none";
+  "w-full px-2.5 py-1.5 border border-[var(--c-border-input)] rounded-lg bg-[var(--c-bg-input)] text-[var(--c-text)] text-sm cursor-pointer outline-none";
 const filterControlClass =
-  "px-4 py-2.5 border border-[rgba(92,73,56,0.16)] rounded-xl bg-[rgba(255,255,255,0.7)] text-[#5f5044] text-sm cursor-pointer outline-none";
+  "px-4 py-2.5 border border-[var(--c-border-input)] rounded-xl bg-[var(--c-bg-control)] text-[var(--c-text-secondary)] text-sm cursor-pointer outline-none";
 
 function CreateRecordCard({ onCreated, onCancel, datasetId }: CreateCardProps) {
   const [pending, startTransition] = useTransition();
@@ -51,15 +51,15 @@ function CreateRecordCard({ onCreated, onCancel, datasetId }: CreateCardProps) {
 
   return (
     <article
-      className="border border-[rgba(31,106,82,0.35)] shadow-[0_0_0_3px_rgba(31,106,82,0.12)] rounded-[20px] bg-[rgba(255,252,247,0.82)] overflow-hidden mb-4"
+      className="border border-[var(--c-accent-ring)] shadow-[0_0_0_3px_var(--c-accent-bg-active)] rounded-[20px] bg-[var(--c-bg-card)] overflow-hidden mb-4"
     >
       <form className="p-5 px-6" onSubmit={handleSubmit}>
         {datasetId && <input type="hidden" name="datasetId" value={datasetId} />}
         <div className="flex items-start gap-3 mb-4 flex-wrap">
-          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full bg-[rgba(92,73,56,0.08)] font-mono text-[0.72rem] text-[#8a7767] shrink-0">
+          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full bg-[var(--c-tag-bg)] font-mono text-[0.72rem] text-[var(--c-text-muted)] shrink-0">
             New record
           </span>
-          <h3 className="flex-1 m-0 text-[1.05rem] font-bold text-[#8a7767] italic leading-[1.35]">
+          <h3 className="flex-1 m-0 text-[1.05rem] font-bold text-[var(--c-text-muted)] italic leading-[1.35]">
             Creating…
           </h3>
         </div>
@@ -127,21 +127,21 @@ function CreateRecordCard({ onCreated, onCancel, datasetId }: CreateCardProps) {
         </div>
 
         {error && (
-          <p className="px-3.5 py-2.5 rounded-[10px] bg-[rgba(159,54,38,0.1)] border border-[rgba(159,54,38,0.2)] text-[#7c271b] text-sm mt-3">
+          <p className="px-3.5 py-2.5 rounded-[10px] bg-[var(--c-danger-bg)] border border-[var(--c-danger-border)] text-[var(--c-danger-text)] text-sm mt-3">
             {error}
           </p>
         )}
 
-        <div className="flex gap-2.5 mt-5 pt-4 border-t border-[rgba(86,67,48,0.12)]">
+        <div className="flex gap-2.5 mt-5 pt-4 border-t border-[var(--c-border)]">
           <button
-            className="px-5 py-2.5 rounded-xl border-0 bg-gradient-to-br from-accent to-accent-strong text-[#f7f8f6] text-sm font-bold cursor-pointer transition-opacity disabled:opacity-70 disabled:cursor-wait"
+            className="px-5 py-2.5 rounded-xl border-0 bg-gradient-to-br from-accent to-accent-strong text-[var(--c-text-on-accent)] text-sm font-bold cursor-pointer transition-opacity disabled:opacity-70 disabled:cursor-wait"
             type="submit"
             disabled={pending}
           >
             {pending ? "Creating…" : "Create record"}
           </button>
           <button
-            className="px-5 py-2.5 rounded-xl border border-[rgba(92,73,56,0.16)] bg-[rgba(255,255,255,0.6)] text-[#5f5044] text-sm font-semibold cursor-pointer transition-colors hover:bg-[rgba(255,255,255,0.9)]"
+            className="px-5 py-2.5 rounded-xl border border-[var(--c-border-input)] bg-[var(--c-bg-cancel-btn)] text-[var(--c-text-secondary)] text-sm font-semibold cursor-pointer transition-colors hover:bg-[var(--c-bg-input)]"
             type="button"
             onClick={onCancel}
             disabled={pending}
@@ -188,19 +188,19 @@ export function RecordFilters({
   return (
     <>
       <div
-        className="flex flex-wrap gap-2.5 items-center mb-6 px-5 py-4 border border-[rgba(86,67,48,0.12)] rounded-[20px] bg-[rgba(255,252,247,0.82)]"
+        className="flex flex-wrap gap-2.5 items-center mb-6 px-5 py-4 border border-[var(--c-border)] rounded-[20px] bg-[var(--c-bg-card)]"
         role="search"
       >
         <form onSubmit={handleSearch} className="flex gap-2 flex-[1_1_200px] min-w-0">
           <input
-            className="flex-1 min-w-[150px] px-3.5 py-2.5 border border-[rgba(92,73,56,0.16)] rounded-xl bg-[rgba(255,255,255,0.7)] text-[#1f1811] text-sm outline-none transition-[border-color,box-shadow] focus:border-[rgba(31,106,82,0.4)] focus:shadow-[0_0_0_3px_rgba(31,106,82,0.35)]"
+            className="flex-1 min-w-[150px] px-3.5 py-2.5 border border-[var(--c-border-input)] rounded-xl bg-[var(--c-bg-control)] text-[var(--c-text)] text-sm outline-none transition-[border-color,box-shadow] focus:border-[var(--c-accent-focus)] focus:shadow-[0_0_0_3px_var(--c-accent-ring)]"
             name="search"
             defaultValue={search}
             placeholder="Search label, description, category…"
             aria-label="Search records"
           />
           <button
-            className="px-4 py-2.5 border border-[rgba(92,73,56,0.16)] rounded-xl bg-[rgba(255,255,255,0.7)] text-[#5f5044] text-sm cursor-pointer transition-colors hover:bg-[rgba(31,106,82,0.08)] hover:text-accent-strong hover:border-[rgba(31,106,82,0.25)]"
+            className="px-4 py-2.5 border border-[var(--c-border-input)] rounded-xl bg-[var(--c-bg-control)] text-[var(--c-text-secondary)] text-sm cursor-pointer transition-colors hover:bg-[var(--c-accent-bg)] hover:text-accent-strong hover:border-[var(--c-accent-border)]"
             type="submit"
           >
             Search
@@ -246,7 +246,7 @@ export function RecordFilters({
         </select>
 
         <button
-          className="px-4 py-2.5 border border-[rgba(92,73,56,0.16)] rounded-xl bg-[rgba(255,255,255,0.7)] text-[#5f5044] text-sm cursor-pointer transition-colors hover:bg-[rgba(31,106,82,0.08)] hover:text-accent-strong hover:border-[rgba(31,106,82,0.25)]"
+          className="px-4 py-2.5 border border-[var(--c-border-input)] rounded-xl bg-[var(--c-bg-control)] text-[var(--c-text-secondary)] text-sm cursor-pointer transition-colors hover:bg-[var(--c-accent-bg)] hover:text-accent-strong hover:border-[var(--c-accent-border)]"
           onClick={() => navigate({ order: order === "asc" ? "desc" : "asc" })}
           title={`Currently: ${order === "asc" ? "ascending" : "descending"}`}
         >
@@ -255,7 +255,7 @@ export function RecordFilters({
 
         {(search || category || status) ? (
           <button
-            className="px-4 py-2.5 border border-[rgba(92,73,56,0.16)] rounded-xl bg-[rgba(255,255,255,0.7)] text-[#5f5044] text-sm cursor-pointer transition-colors hover:bg-[rgba(31,106,82,0.08)] hover:text-accent-strong hover:border-[rgba(31,106,82,0.25)]"
+            className="px-4 py-2.5 border border-[var(--c-border-input)] rounded-xl bg-[var(--c-bg-control)] text-[var(--c-text-secondary)] text-sm cursor-pointer transition-colors hover:bg-[var(--c-accent-bg)] hover:text-accent-strong hover:border-[var(--c-accent-border)]"
             onClick={() => navigate({ search: "", category: "", status: "" })}
           >
             Clear filters
@@ -266,7 +266,7 @@ export function RecordFilters({
 
         {isAdmin && (
           <button
-            className="px-4 py-2.5 rounded-xl border-0 bg-gradient-to-br from-accent to-accent-strong text-[#f7f8f6] text-sm font-bold cursor-pointer"
+            className="px-4 py-2.5 rounded-xl border-0 bg-gradient-to-br from-accent to-accent-strong text-[var(--c-text-on-accent)] text-sm font-bold cursor-pointer"
             onClick={() => setShowCreate((p) => !p)}
           >
             {showCreate ? "✕ Cancel" : "+ New Record"}

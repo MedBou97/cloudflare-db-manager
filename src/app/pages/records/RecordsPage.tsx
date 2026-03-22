@@ -91,7 +91,7 @@ export async function RecordsPage({ ctx, request }: RequestInfo) {
     <AppShell user={ctx.user} currentPath="/records">
       <div className="mb-7">
         <h1 className="m-0 mb-1.5 font-serif text-[clamp(1.8rem,3vw,2.4rem)] leading-[1.1] tracking-[-0.03em]">Vector Records</h1>
-        <p className="m-0 text-[#5f5044] text-[0.95rem]">
+        <p className="m-0 text-[var(--c-text-secondary)] text-[0.95rem]">
           {total.toLocaleString()} record{total !== 1 ? "s" : ""} total
           {search || category || status ? " (filtered)" : ""}
         </p>
@@ -113,20 +113,20 @@ export async function RecordsPage({ ctx, request }: RequestInfo) {
       />
 
       {totalPages > 1 && (
-        <nav className="flex items-center justify-center gap-3 mt-8 pt-6 border-t border-[rgba(86,67,48,0.12)]" aria-label="Records pagination">
+        <nav className="flex items-center justify-center gap-3 mt-8 pt-6 border-t border-[var(--c-border)]" aria-label="Records pagination">
           <a
             href={buildUrl({ page: page - 1 })}
-            className={`px-[18px] py-2 rounded-xl border border-[rgba(92,73,56,0.16)] bg-[rgba(255,252,247,0.82)] text-[#5f5044] text-sm font-semibold no-underline inline-flex items-center gap-1.5 transition-colors hover:bg-[rgba(31,106,82,0.08)] hover:border-[rgba(31,106,82,0.25)] hover:text-accent-strong${page <= 1 ? " opacity-40 cursor-not-allowed pointer-events-none" : ""}`}
+            className={`px-[18px] py-2 rounded-xl border border-[var(--c-border-input)] bg-[var(--c-bg-card)] text-[var(--c-text-secondary)] text-sm font-semibold no-underline inline-flex items-center gap-1.5 transition-colors hover:bg-[var(--c-accent-bg)] hover:border-[var(--c-accent-border)] hover:text-accent-strong${page <= 1 ? " opacity-40 cursor-not-allowed pointer-events-none" : ""}`}
             aria-disabled={page <= 1}
           >
             ← Previous
           </a>
-          <span className="text-sm text-[#8a7767]">
+          <span className="text-sm text-[var(--c-text-muted)]">
             Page {page} of {totalPages}
           </span>
           <a
             href={buildUrl({ page: page + 1 })}
-            className={`px-[18px] py-2 rounded-xl border border-[rgba(92,73,56,0.16)] bg-[rgba(255,252,247,0.82)] text-[#5f5044] text-sm font-semibold no-underline inline-flex items-center gap-1.5 transition-colors hover:bg-[rgba(31,106,82,0.08)] hover:border-[rgba(31,106,82,0.25)] hover:text-accent-strong${page >= totalPages ? " opacity-40 cursor-not-allowed pointer-events-none" : ""}`}
+            className={`px-[18px] py-2 rounded-xl border border-[var(--c-border-input)] bg-[var(--c-bg-card)] text-[var(--c-text-secondary)] text-sm font-semibold no-underline inline-flex items-center gap-1.5 transition-colors hover:bg-[var(--c-accent-bg)] hover:border-[var(--c-accent-border)] hover:text-accent-strong${page >= totalPages ? " opacity-40 cursor-not-allowed pointer-events-none" : ""}`}
             aria-disabled={page >= totalPages}
           >
             Next →

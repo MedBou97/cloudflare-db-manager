@@ -43,7 +43,7 @@ export function RecordList({ initialRecords, isAdmin }: RecordListProps) {
 
   if (records.length === 0) {
     return (
-      <div className="py-[60px] px-6 text-center text-[#8a7767] text-[0.95rem] border border-dashed border-[rgba(86,67,48,0.12)] rounded-[20px]">
+      <div className="py-[60px] px-6 text-center text-[var(--c-text-muted)] text-[0.95rem] border border-dashed border-[var(--c-border)] rounded-[20px]">
         No records found. {isAdmin ? 'Use "New Record" above to create one.' : ""}
       </div>
     );

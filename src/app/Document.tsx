@@ -1,20 +1,29 @@
-export const Document: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
+export const Document: React.FC<{
+  children: React.ReactNode;
+  rw?: { nonce: string };
+}> = ({ children, rw }) => {
   const criticalCss = `
     html {
       min-height: 100%;
       background:
-        radial-gradient(circle at top left, rgba(216,195,168,0.72), transparent 32%),
-        radial-gradient(circle at bottom right, rgba(151,186,170,0.42), transparent 28%),
-        linear-gradient(180deg, #f7f1e9 0%, #f1e9df 100%);
+        radial-gradient(circle at top left, var(--c-gradient-warm), transparent 32%),
+        radial-gradient(circle at bottom right, var(--c-gradient-accent), transparent 28%),
+        linear-gradient(180deg, var(--c-bg-page-start) 0%, var(--c-bg-page-end) 100%);
       font-family: "Inter","Segoe UI",sans-serif;
-      color: #1f1811;
-      color-scheme: light;
+      color: var(--c-text);
     }
     body { margin: 0; min-height: 100vh; }
     #root { min-height: 100vh; }
     a { color: inherit; }
+  `;
+
+  const themeScript = `
+    (function(){
+      var t = localStorage.getItem("theme");
+      if (!t) t = matchMedia("(prefers-color-scheme:dark)").matches ? "dark" : "light";
+      document.documentElement.dataset.theme = t;
+      document.documentElement.style.colorScheme = t;
+    })();
   `;
 
   return (
@@ -29,6 +38,7 @@ export const Document: React.FC<{ children: React.ReactNode }> = ({
         <title>DB Manager</title>
         <link rel="modulepreload" href="/src/client.tsx" />
         <style>{criticalCss}</style>
+        <script nonce={rw?.nonce} dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
       <body>
         <div id="root">{children}</div>

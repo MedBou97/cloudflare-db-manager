@@ -66,6 +66,7 @@ coverage
 .wrangler
 
 dev.db
+*.db-journal
 
 # Local SQLite artifacts
 *.sqlite
