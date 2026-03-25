@@ -8,6 +8,7 @@ declare namespace Cloudflare {
 		AUTH_SECRET_KEY: string;
 		RESEND_API: string;
 		DATABASE_URL: string;
+        DB_CONNECTION_ENCRYPTION_KEY?: string;
 		SESSION_DURABLE_OBJECT: DurableObjectNamespace<import("./src/worker").SessionDurableObject>;
 		DB: D1Database;
 		ASSETS: Fetcher;
