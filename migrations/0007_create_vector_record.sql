@@ -16,7 +16,9 @@ CREATE TABLE "VectorRecord" (
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "createdById" TEXT NOT NULL,
-    CONSTRAINT "VectorRecord_createdById_fkey" FOREIGN KEY ("createdById") REFERENCES "User" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+    "datasetId" TEXT,
+    CONSTRAINT "VectorRecord_createdById_fkey" FOREIGN KEY ("createdById") REFERENCES "User" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT "VectorRecord_datasetId_fkey" FOREIGN KEY ("datasetId") REFERENCES "Dataset" ("id") ON DELETE SET NULL ON UPDATE CASCADE
 );
 
 -- CreateIndex
@@ -27,3 +29,6 @@ CREATE INDEX "VectorRecord_createdById_idx" ON "VectorRecord"("createdById");
 
 -- CreateIndex
 CREATE INDEX "VectorRecord_createdAt_idx" ON "VectorRecord"("createdAt");
+
+-- CreateIndex
+CREATE INDEX "VectorRecord_datasetId_idx" ON "VectorRecord"("datasetId");

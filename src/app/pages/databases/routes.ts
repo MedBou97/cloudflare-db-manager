@@ -1,11 +1,15 @@
 import { route } from "rwsdk/router";
-import { requireVerified, requireAdmin } from "@/app/pages/auth/middleware";
+import { requireVerified } from "@/app/pages/auth/middleware";
 import { DatabasesPage } from "./DatabasesPage";
-import { ImportPage } from "./ImportPage";
-import { DatabaseDetailPage } from "./DatabaseDetailPage";
+import { ConnectPage } from "./ConnectPage";
+import { ConnectionDetailPage } from "./ConnectionDetailPage";
+import { TableBrowsePage } from "./TableBrowsePage";
+import { SqlEditorPage } from "./SqlEditorPage";
 
 export const databasesRoutes = [
   route("/databases", [requireVerified(), DatabasesPage]),
-  route("/databases/import", [requireAdmin(), ImportPage]),
-  route("/databases/:id", [requireVerified(), DatabaseDetailPage]),
+  route("/databases/connect", [requireVerified(), ConnectPage]),
+  route("/databases/connections/:id", [requireVerified(), ConnectionDetailPage]),
+  route("/databases/connections/:id/tables/:schema/:table", [requireVerified(), TableBrowsePage]),
+  route("/databases/connections/:id/sql", [requireVerified(), SqlEditorPage]),
 ];

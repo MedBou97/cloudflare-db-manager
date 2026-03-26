@@ -21,7 +21,8 @@
     ]
   },
   "vars": {
-    "WEBAUTHN_APP_NAME": "sdk-auth-kitchen-username-password"
+    "WEBAUTHN_APP_NAME": "sdk-auth-kitchen-username-password",
+    "DB_CONNECTION_ENCRYPTION_KEY": "change-me-in-production"
   },
   "migrations": [
     {

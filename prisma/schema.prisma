@@ -30,8 +30,33 @@ model User {
   vectorRecords       VectorRecord[]
   auditLogs           AuditLog[]
   datasets            Dataset[]
+  databaseConnections DatabaseConnection[]
 
   @@index([username, email, verificationToken, resetToken])
+}
+
+model DatabaseConnection {
+  id                String   @id @default(uuid())
+  name              String
+  engine            String   @default("postgres")
+  host              String
+  port              Int      @default(5432)
+  databaseName      String
+  username          String
+  sslMode           String   @default("require")
+  encryptedConfig   String
+  keyVersion        Int      @default(1)
+  status            String   @default("active")
+  lastTestedAt      DateTime?
+  lastError         String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @default(now())
+  createdById       String
+  createdBy         User     @relation(fields: [createdById], references: [id])
+
+  @@index([createdById, status])
+  @@index([engine])
+  @@index([createdAt])
 }
 
 model Dataset {
