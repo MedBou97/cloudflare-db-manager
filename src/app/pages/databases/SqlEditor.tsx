@@ -17,7 +17,7 @@ type ResultState = {
   requiresConfirmation: boolean;
 };
 
-const DEFAULT_QUERY = "SELECT table_schema, table_name FROM information_schema.tables LIMIT 25";
+const DEFAULT_QUERY = 'SELECT * FROM "tableName";';
 
 export function SqlEditor({ connectionId }: Props) {
   const [pending, startTransition] = useTransition();

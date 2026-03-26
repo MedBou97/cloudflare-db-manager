@@ -23,6 +23,11 @@ export function SqlEditorPage({ ctx, request }: RequestInfo) {
         <p className="m-0 text-[0.92rem] text-[var(--c-text-secondary)]">
           Run SQL with guardrails: 5s timeout, 250-row cap, and destructive confirmation.
         </p>
+        <p className="m-0 mt-2 text-[0.9rem] font-semibold">
+          <span className="bg-[rgba(255,193,7,0.08)] px-3 py-2 rounded-md">
+          ⚠️ Put table names between double quotes to avoid conflicts with reserved keywords.
+          </span>
+        </p>
       </div>
 
       <SqlEditor connectionId={connectionId} />
