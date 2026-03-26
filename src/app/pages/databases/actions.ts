@@ -6,7 +6,15 @@ import { ROLES, AUDIT_ACTIONS } from "@/app/shared/constants";
 import { logAction } from "@/app/pages/records/actions";
 import { env } from "cloudflare:workers";
 import { encryptSecretPayload, decryptSecretPayload } from "./crypto";
-import { testPostgresConnection } from "./postgres";
+import {
+  testPostgresConnection,
+  getTableRows as fetchTableRows,
+  insertTableRow as insertPgRow,
+  updateTableRow as updatePgRow,
+  deleteTableRow as deletePgRow,
+  executeSqlWithGuardrails,
+  type TableRowsResult,
+} from "./postgres";
 
 // ─── Validation ───────────────────────────────────────────────────────────────
 
@@ -299,6 +307,254 @@ export async function testSavedDatabaseConnection(connectionId: string) {
   );
 
   return { success: true as const };
+}
+
+type AccessResolved = {
+  ctx: NonNullable<(typeof requestInfo)["ctx"]>;
+  connection: NonNullable<Awaited<ReturnType<typeof db.databaseConnection.findUnique>>>;
+  connectionString: string;
+};
+
+async function resolveDatabaseConnectionAccess(connectionId: string): Promise<AccessResolved | { error: string }> {
+  const { ctx } = requestInfo;
+  if (!ctx.user?.verified) {
+    return { error: "Unauthorized" };
+  }
+
+  const encryptionSecret = env.DB_CONNECTION_ENCRYPTION_KEY;
+  if (!encryptionSecret) {
+    return { error: "Server is missing DB_CONNECTION_ENCRYPTION_KEY." };
+  }
+
+  const connection = await db.databaseConnection.findUnique({ where: { id: connectionId } });
+  if (!connection) {
+    return { error: "Connection not found." };
+  }
+
+  if (ctx.user.role !== ROLES.ADMIN && connection.createdById !== ctx.user.id) {
+    return { error: "Forbidden" };
+  }
+
+  try {
+    const payload = await decryptSecretPayload(connection.encryptedConfig, encryptionSecret);
+    const connectionString = (JSON.parse(payload) as { connectionString: string }).connectionString;
+    return { ctx, connection, connectionString };
+  } catch {
+    return { error: "Failed to decrypt saved credentials." };
+  }
+}
+
+export type GetTableRowsInput = {
+  connectionId: string;
+  schemaName: string;
+  tableName: string;
+  page?: number;
+  pageSize?: number;
+  search?: string;
+  searchColumn?: string;
+  sortColumn?: string;
+  sortOrder?: "asc" | "desc";
+};
+
+export type GetTableRowsOutput =
+  | { error: string; data: null }
+  | { error: null; data: TableRowsResult & { connectionName: string; canMutate: boolean } };
+
+export async function getTableRows(input: GetTableRowsInput): Promise<GetTableRowsOutput> {
+  const resolved = await resolveDatabaseConnectionAccess(input.connectionId);
+  if ("error" in resolved) {
+    return { error: resolved.error, data: null };
+  }
+
+  try {
+    const data = await fetchTableRows(resolved.connectionString, {
+      schema: input.schemaName,
+      table: input.tableName,
+      page: input.page ?? 1,
+      pageSize: input.pageSize ?? 25,
+      search: input.search,
+      searchColumn: input.searchColumn,
+      sortColumn: input.sortColumn,
+      sortOrder: input.sortOrder,
+    });
+
+    return {
+      error: null,
+      data: {
+        ...data,
+        connectionName: resolved.connection.name,
+        canMutate: resolved.ctx.user?.role === ROLES.ADMIN,
+      },
+    };
+  } catch (error) {
+    return {
+      error: error instanceof Error ? error.message : "Failed to load table rows.",
+      data: null,
+    };
+  }
+}
+
+type RowMutationInput = {
+  connectionId: string;
+  schemaName: string;
+  tableName: string;
+  values?: Record<string, unknown>;
+  primaryKeyValues?: Record<string, unknown>;
+};
+
+function isAdmin(ctx: AccessResolved["ctx"]) {
+  return ctx.user?.role === ROLES.ADMIN;
+}
+
+export async function insertTableRow(input: RowMutationInput) {
+  const resolved = await resolveDatabaseConnectionAccess(input.connectionId);
+  if ("error" in resolved) {
+    return { error: resolved.error };
+  }
+  if (!isAdmin(resolved.ctx)) {
+    return { error: "Only admins can insert rows." };
+  }
+  if (!input.values || typeof input.values !== "object") {
+    return { error: "Insert values are required." };
+  }
+
+  try {
+    const row = await insertPgRow(
+      resolved.connectionString,
+      input.schemaName,
+      input.tableName,
+      input.values,
+    );
+
+    await logAction(
+      resolved.ctx.user!.id,
+      resolved.ctx.user!.username,
+      AUDIT_ACTIONS.INSERT_TABLE_ROW,
+      resolved.connection.id,
+      `${resolved.ctx.user!.username} inserted a row into ${input.schemaName}.${input.tableName}`,
+    );
+
+    return { error: null, row };
+  } catch (error) {
+    return { error: error instanceof Error ? error.message : "Failed to insert row." };
+  }
+}
+
+export async function updateTableRow(input: RowMutationInput) {
+  const resolved = await resolveDatabaseConnectionAccess(input.connectionId);
+  if ("error" in resolved) {
+    return { error: resolved.error };
+  }
+  if (!isAdmin(resolved.ctx)) {
+    return { error: "Only admins can update rows." };
+  }
+  if (!input.values || typeof input.values !== "object") {
+    return { error: "Update values are required." };
+  }
+  if (!input.primaryKeyValues || typeof input.primaryKeyValues !== "object") {
+    return { error: "Primary key values are required for update." };
+  }
+
+  try {
+    const row = await updatePgRow(
+      resolved.connectionString,
+      input.schemaName,
+      input.tableName,
+      input.primaryKeyValues,
+      input.values,
+    );
+
+    if (!row) {
+      return { error: "No row matched the provided primary key." };
+    }
+
+    await logAction(
+      resolved.ctx.user!.id,
+      resolved.ctx.user!.username,
+      AUDIT_ACTIONS.UPDATE_TABLE_ROW,
+      resolved.connection.id,
+      `${resolved.ctx.user!.username} updated a row in ${input.schemaName}.${input.tableName}`,
+    );
+
+    return { error: null, row };
+  } catch (error) {
+    return { error: error instanceof Error ? error.message : "Failed to update row." };
+  }
+}
+
+export async function deleteTableRow(input: RowMutationInput) {
+  const resolved = await resolveDatabaseConnectionAccess(input.connectionId);
+  if ("error" in resolved) {
+    return { error: resolved.error };
+  }
+  if (!isAdmin(resolved.ctx)) {
+    return { error: "Only admins can delete rows." };
+  }
+  if (!input.primaryKeyValues || typeof input.primaryKeyValues !== "object") {
+    return { error: "Primary key values are required for delete." };
+  }
+
+  try {
+    const result = await deletePgRow(
+      resolved.connectionString,
+      input.schemaName,
+      input.tableName,
+      input.primaryKeyValues,
+    );
+
+    if (!result.deleted) {
+      return { error: "No row matched the provided primary key." };
+    }
+
+    await logAction(
+      resolved.ctx.user!.id,
+      resolved.ctx.user!.username,
+      AUDIT_ACTIONS.DELETE_TABLE_ROW,
+      resolved.connection.id,
+      `${resolved.ctx.user!.username} deleted a row from ${input.schemaName}.${input.tableName}`,
+    );
+
+    return { error: null, deleted: true };
+  } catch (error) {
+    return { error: error instanceof Error ? error.message : "Failed to delete row." };
+  }
+}
+
+export type ExecuteSqlInput = {
+  connectionId: string;
+  query: string;
+  confirmed?: boolean;
+  timeoutMs?: number;
+  maxRows?: number;
+};
+
+export async function executeSqlQuery(input: ExecuteSqlInput) {
+  const resolved = await resolveDatabaseConnectionAccess(input.connectionId);
+  if ("error" in resolved) {
+    return { error: resolved.error };
+  }
+  if (!isAdmin(resolved.ctx)) {
+    return { error: "Only admins can execute SQL queries." };
+  }
+
+  const result = await executeSqlWithGuardrails(resolved.connectionString, {
+    query: input.query,
+    confirmed: Boolean(input.confirmed),
+    timeoutMs: input.timeoutMs,
+    maxRows: input.maxRows,
+  });
+
+  if (!result.error && !result.requiresConfirmation) {
+    await logAction(
+      resolved.ctx.user!.id,
+      resolved.ctx.user!.username,
+      AUDIT_ACTIONS.EXECUTE_SQL_QUERY,
+      resolved.connection.id,
+      `${resolved.ctx.user!.username} executed SQL on connection "${resolved.connection.name}"`,
+    );
+  }
+
+  return result;
 }
 
 // ─── Import ───────────────────────────────────────────────────────────────────

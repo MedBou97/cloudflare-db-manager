@@ -43,13 +43,14 @@ export async function ConnectionDetailPage({ ctx, request }: RequestInfo) {
     const connectionString = (JSON.parse(payload) as { connectionString: string }).connectionString;
     tables = await listPostgresTables(connectionString);
 
-    await logAction(
-      ctx.user.id,
-      ctx.user.username,
-      AUDIT_ACTIONS.VIEW_DB_TABLES,
-      connection.id,
-      `${ctx.user.username} viewed tables for PostgreSQL profile "${connection.name}"`,
-    );
+    // currently this is causing a lot of log entries, can check it later
+    // await logAction(
+    //   ctx.user.id,
+    //   ctx.user.username,
+    //   AUDIT_ACTIONS.VIEW_DB_TABLES,
+    //   connection.id,
+    //   `${ctx.user.username} viewed tables for PostgreSQL profile "${connection.name}"`,
+    // );
   } catch {
     loadError = "Could not load tables from this connection.";
   }
@@ -64,7 +65,15 @@ export async function ConnectionDetailPage({ ctx, request }: RequestInfo) {
           >
             ← Back to Databases
           </a>
-          <TestConnectionButton connectionId={connection.id} />
+          <div className="flex items-center gap-2">
+            <a
+              href={`/databases/connections/${connection.id}/sql`}
+              className="px-4 py-2.5 border border-[var(--c-border-input)] rounded-xl bg-[var(--c-bg-control)] text-[var(--c-text-secondary)] text-sm no-underline"
+            >
+              SQL Editor
+            </a>
+            <TestConnectionButton connectionId={connection.id} />
+          </div>
         </div>
 
         <h1 className="m-0 mb-1.5 font-serif text-[clamp(1.8rem,3vw,2.4rem)] leading-[1.1] tracking-[-0.03em]">
@@ -92,13 +101,14 @@ export async function ConnectionDetailPage({ ctx, request }: RequestInfo) {
       ) : (
         <div className="grid grid-cols-[repeat(auto-fill,minmax(260px,1fr))] gap-4">
           {tables.map((table) => (
-            <article
+            <a
               key={`${table.schema}.${table.name}`}
+              href={`/databases/connections/${connection.id}/tables/${encodeURIComponent(table.schema)}/${encodeURIComponent(table.name)}`}
               className="p-5 border border-[var(--c-border)] rounded-2xl bg-[var(--c-bg-card)]"
             >
               <p className="m-0 text-xs uppercase tracking-[0.08em] text-[var(--c-text-muted)]">{table.schema}</p>
               <h2 className="m-0 mt-1 text-[1rem] text-[var(--c-text)]">{table.name}</h2>
-            </article>
+            </a>
           ))}
         </div>
       )}
