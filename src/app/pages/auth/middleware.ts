@@ -37,7 +37,7 @@ export const loadAuthContext =
           id: ctx.session.userId,
         },
       });
-      console.log("🔍 FOUND USER");
+      // console.log("🔍 FOUND USER");
     }
   };
 

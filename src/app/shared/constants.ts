@@ -11,14 +11,10 @@ export const ROLES = Object.freeze({
 export type Role = (typeof ROLES)[keyof typeof ROLES];
 
 export const AUDIT_ACTIONS = Object.freeze({
-  VIEW_RECORDS: "VIEW_RECORDS",
-  VIEW_RECORD: "VIEW_RECORD",
   CREATE_RECORD: "CREATE_RECORD",
   EDIT_RECORD: "EDIT_RECORD",
   DELETE_RECORD: "DELETE_RECORD",
   VIEW_LOGS: "VIEW_LOGS",
-  IMPORT_DATASET: "IMPORT_DATASET",
-  DELETE_DATASET: "DELETE_DATASET",
   CREATE_DB_CONNECTION: "CREATE_DB_CONNECTION",
   TEST_DB_CONNECTION: "TEST_DB_CONNECTION",
   VIEW_DB_TABLES: "VIEW_DB_TABLES",
@@ -30,6 +26,4 @@ export const AUDIT_ACTIONS = Object.freeze({
 
 export type AuditAction = (typeof AUDIT_ACTIONS)[keyof typeof AUDIT_ACTIONS];
 
-export const VECTOR_PREVIEW_LENGTH = 5;
-export const RECORDS_PER_PAGE = 10;
 export const LOGS_PER_PAGE = 20;
