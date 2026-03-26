@@ -11,6 +11,8 @@ export type TableColumnInfo = {
   udtName: string;
   isNullable: boolean;
   defaultValue: string | null;
+  /** 'ALWAYS' | 'BY DEFAULT' when the column is a GENERATED … AS IDENTITY column, otherwise null */
+  identityGeneration: string | null;
   isPrimaryKey: boolean;
 };
 
@@ -167,7 +169,7 @@ export async function getTableSchema(connectionString: string, schema: string, t
   const pkSet = new Set(pkRows.map((row) => row.column_name));
   const rows = (await sql.query(
     `
-      SELECT column_name, data_type, udt_name, is_nullable, column_default
+      SELECT column_name, data_type, udt_name, is_nullable, column_default, identity_generation
       FROM information_schema.columns
       WHERE table_schema = $1 AND table_name = $2
       ORDER BY ordinal_position ASC
@@ -179,6 +181,7 @@ export async function getTableSchema(connectionString: string, schema: string, t
     udt_name: string;
     is_nullable: "YES" | "NO";
     column_default: string | null;
+    identity_generation: string | null;
   }>;
 
   return rows.map((row) => ({
@@ -187,6 +190,7 @@ export async function getTableSchema(connectionString: string, schema: string, t
     udtName: row.udt_name,
     isNullable: row.is_nullable === "YES",
     defaultValue: row.column_default,
+    identityGeneration: row.identity_generation ?? null,
     isPrimaryKey: pkSet.has(row.column_name),
   }));
 }

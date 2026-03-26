@@ -88,7 +88,9 @@ function parseDraftValue(column: TableColumnInfo, raw: string, original: unknown
 
   if (inputKind === "json") {
     try {
-      return JSON.parse(trimmed) as unknown;
+      JSON.parse(trimmed);
+      // Store as string, not parsed object, to avoid serialization issues
+      return trimmed;
     } catch {
       throw new Error(`${column.name} must be valid JSON.`);
     }
