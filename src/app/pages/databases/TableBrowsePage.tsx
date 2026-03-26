@@ -4,11 +4,8 @@ import { getTableRows } from "./actions";
 import { InsertRowButton } from "./InsertRowButton";
 import { TableRowActions } from "./TableRowActions";
 
-function stringifyCell(value: unknown) {
-  if (value === null || value === undefined) return "";
-  if (typeof value === "object") return JSON.stringify(value);
-  return String(value);
-}
+const filterControlClass =
+  "px-4 py-2.5 border border-[var(--c-border-input)] rounded-xl bg-[var(--c-bg-control)] text-[var(--c-text-secondary)] text-sm cursor-pointer outline-none";
 
 export async function TableBrowsePage({ ctx, request }: RequestInfo) {
   const url = new URL(request.url);
@@ -83,12 +80,6 @@ export async function TableBrowsePage({ ctx, request }: RequestInfo) {
           >
             Open SQL Editor
           </a>
-          <InsertRowButton
-            connectionId={connectionId}
-            schemaName={schemaName}
-            tableName={tableName}
-            canMutate={data.canMutate}
-          />
         </div>
       </div>
 
@@ -98,84 +89,91 @@ export async function TableBrowsePage({ ctx, request }: RequestInfo) {
         </p>
       )}
 
-      <form method="get" action={basePath} className="mb-5 p-4 border border-[var(--c-border)] rounded-2xl bg-[var(--c-bg-card)] flex flex-wrap gap-2 items-center">
+      <form
+        method="get"
+        action={basePath}
+        className="flex flex-wrap gap-2.5 items-center mb-6 px-5 py-4 border border-[var(--c-border)] rounded-[20px] bg-[var(--c-bg-card)]"
+      >
         <input
           name="search"
           defaultValue={search}
           placeholder="Search rows..."
-          className="min-w-[220px] flex-1 px-3.5 py-2.5 border border-[var(--c-border-input)] rounded-xl bg-[var(--c-bg-input)] text-[var(--c-text)] text-sm"
+          className="flex-1 min-w-[200px] px-3.5 py-2.5 border border-[var(--c-border-input)] rounded-xl bg-[var(--c-bg-control)] text-[var(--c-text)] text-sm outline-none transition-[border-color,box-shadow] focus:border-[var(--c-accent-focus)] focus:shadow-[0_0_0_3px_var(--c-accent-ring)]"
         />
 
-        <select name="searchColumn" defaultValue={searchColumn} className="px-3.5 py-2.5 border border-[var(--c-border-input)] rounded-xl bg-[var(--c-bg-control)] text-sm">
+        <select name="searchColumn" defaultValue={searchColumn} className={filterControlClass}>
           <option value="">All columns</option>
           {data.columns.map((col) => (
             <option key={col.name} value={col.name}>{col.name}</option>
           ))}
         </select>
 
-        <select name="sortColumn" defaultValue={sortColumn || data.columns[0]?.name || ""} className="px-3.5 py-2.5 border border-[var(--c-border-input)] rounded-xl bg-[var(--c-bg-control)] text-sm">
+        <select name="sortColumn" defaultValue={sortColumn || data.columns[0]?.name || ""} className={filterControlClass}>
           {data.columns.map((col) => (
             <option key={col.name} value={col.name}>{col.name}</option>
           ))}
         </select>
 
-        <select name="sortOrder" defaultValue={sortOrder} className="px-3.5 py-2.5 border border-[var(--c-border-input)] rounded-xl bg-[var(--c-bg-control)] text-sm">
+        <select name="sortOrder" defaultValue={sortOrder} className={filterControlClass}>
           <option value="desc">Desc</option>
           <option value="asc">Asc</option>
         </select>
 
-        <button type="submit" className="px-4 py-2.5 rounded-xl border border-[var(--c-border-input)] bg-[var(--c-bg-control)] text-[var(--c-text-secondary)] text-sm font-semibold cursor-pointer">
+        <button
+          type="submit"
+          className="px-4 py-2.5 border border-[var(--c-border-input)] rounded-xl bg-[var(--c-bg-control)] text-[var(--c-text-secondary)] text-sm cursor-pointer transition-colors hover:bg-[var(--c-accent-bg)] hover:text-accent-strong hover:border-[var(--c-accent-border)]"
+        >
           Apply
         </button>
+
+        {(search || searchColumn || sortColumn || sortOrder !== "desc") && (
+          <a
+            href={basePath}
+            className="px-4 py-2.5 border border-[var(--c-border-input)] rounded-xl bg-[var(--c-bg-control)] text-[var(--c-text-secondary)] text-sm no-underline transition-colors hover:bg-[var(--c-accent-bg)] hover:text-accent-strong hover:border-[var(--c-accent-border)]"
+          >
+            Clear
+          </a>
+        )}
       </form>
 
-      <div className="overflow-auto border border-[var(--c-border)] rounded-2xl bg-[var(--c-bg-card)]">
-        <table className="w-full border-collapse text-sm">
-          <thead className="bg-[var(--c-bg-input)]">
-            <tr>
-              {data.columns.map((col) => (
-                <th key={col.name} className="text-left px-3 py-2 border-b border-[var(--c-border)] font-semibold text-[var(--c-text-muted)] whitespace-nowrap">
-                  {col.name}
-                </th>
-              ))}
-              {data.canMutate && (
-                <th className="text-right px-3 py-2 border-b border-[var(--c-border)] font-semibold text-[var(--c-text-muted)]">Actions</th>
-              )}
-            </tr>
-          </thead>
-          <tbody>
-            {data.rows.map((row, rowIndex) => {
-              const pkValues = data.hasPrimaryKey
-                ? Object.fromEntries(data.primaryKeyColumns.map((pk) => [pk, row[pk]]))
-                : null;
-              const rowKey = data.hasPrimaryKey
-                ? data.primaryKeyColumns.map((pk) => String(row[pk])).join("|")
-                : String(rowIndex);
+      <InsertRowButton
+        connectionId={connectionId}
+        schemaName={schemaName}
+        tableName={tableName}
+        columns={data.columns}
+        canMutate={data.canMutate}
+      />
 
-              return (
-                <tr key={rowKey} className="border-b border-[var(--c-border)] align-top">
-                  {data.columns.map((col) => (
-                    <td key={`${rowKey}-${col.name}`} className="px-3 py-2 font-mono text-xs text-[var(--c-text)]">
-                      {stringifyCell(row[col.name])}
-                    </td>
-                  ))}
-                  {data.canMutate && (
-                    <td className="px-3 py-2 text-right">
-                      <TableRowActions
-                        connectionId={connectionId}
-                        schemaName={schemaName}
-                        tableName={tableName}
-                        row={row}
-                        primaryKeyValues={pkValues}
-                        disabledReason={!data.hasPrimaryKey ? "No primary key" : undefined}
-                      />
-                    </td>
-                  )}
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+      <div className="mt-4 flex flex-col gap-4">
+        {data.rows.map((row, rowIndex) => {
+          const pkValues = data.hasPrimaryKey
+            ? Object.fromEntries(data.primaryKeyColumns.map((pk) => [pk, row[pk]]))
+            : null;
+          const rowKey = data.hasPrimaryKey
+            ? data.primaryKeyColumns.map((pk) => String(row[pk])).join("|")
+            : String(rowIndex);
+
+          return (
+            <TableRowActions
+              key={rowKey}
+              connectionId={connectionId}
+              schemaName={schemaName}
+              tableName={tableName}
+              columns={data.columns}
+              row={row}
+              rowKey={rowKey}
+              showActions={data.canMutate}
+              primaryKeyValues={pkValues}
+              disabledReason={!data.hasPrimaryKey ? "No primary key" : undefined}
+            />
+          );
+        })}
+
+        {data.rows.length === 0 && (
+          <div className="px-5 py-4 border border-[var(--c-border)] rounded-[20px] bg-[var(--c-bg-card)] text-sm text-[var(--c-text-secondary)]">
+            No rows found for the current filters.
+          </div>
+        )}
       </div>
 
       {data.totalPages > 1 && (

@@ -227,29 +227,29 @@ export default defineScript(async ({ env }) => {
     },
   });
 
-  const VECTOR_DIM = 1536;
+  // const VECTOR_DIM = 1536;
 
-  for (const rec of SEED_RECORDS) {
-    const vector = makeVector(VECTOR_DIM);
-    await db.vectorRecord.create({
-      data: {
-        id: crypto.randomUUID(),
-        label: rec.label,
-        description: rec.description,
-        category: rec.category,
-        source: rec.source,
-        tags: rec.tags,
-        numericValue: rec.numericValue,
-        confidence: rec.confidence,
-        vector: JSON.stringify(vector),
-        dimension: VECTOR_DIM,
-        metadata: rec.metadata,
-        status: rec.status,
-        version: 1,
-        createdById: adminUser.id,
-      },
-    });
-  }
+  // for (const rec of SEED_RECORDS) {
+  //   const vector = makeVector(VECTOR_DIM);
+  //   await db.vectorRecord.create({
+  //     data: {
+  //       id: crypto.randomUUID(),
+  //       label: rec.label,
+  //       description: rec.description,
+  //       category: rec.category,
+  //       source: rec.source,
+  //       tags: rec.tags,
+  //       numericValue: rec.numericValue,
+  //       confidence: rec.confidence,
+  //       vector: JSON.stringify(vector),
+  //       dimension: VECTOR_DIM,
+  //       metadata: rec.metadata,
+  //       status: rec.status,
+  //       version: 1,
+  //       createdById: adminUser.id,
+  //     },
+  //   });
+  // }
 
   console.log("🌱 Seeded: 2 users (adminuser / testuser) + 10 vector records");
   console.log("   Passwords: password123");
