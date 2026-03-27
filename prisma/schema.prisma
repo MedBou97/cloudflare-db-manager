@@ -27,9 +27,7 @@ model User {
   email               String         @unique
   role                String         @default("USER")
   createdAt           DateTime       @default(now())
-  vectorRecords       VectorRecord[]
   auditLogs           AuditLog[]
-  datasets            Dataset[]
   databaseConnections DatabaseConnection[]
 
   @@index([username, email, verificationToken, resetToken])
@@ -57,45 +55,6 @@ model DatabaseConnection {
   @@index([createdById, status])
   @@index([engine])
   @@index([createdAt])
-}
-
-model Dataset {
-  id           String         @id @default(uuid())
-  name         String
-  description  String         @default("")
-  importedAt   DateTime       @default(now())
-  importedById String?
-  importedBy   User?          @relation(fields: [importedById], references: [id])
-  records      VectorRecord[]
-
-  @@index([importedById])
-}
-
-model VectorRecord {
-  id           String   @id @default(uuid())
-  label        String
-  description  String
-  category     String
-  source       String
-  tags         String   @default("[]")
-  numericValue Float
-  confidence   Float
-  vector       String
-  dimension    Int
-  metadata     String   @default("{}")
-  status       String   @default("active")
-  version      Int      @default(1)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @default(now())
-  createdById  String
-  createdBy    User     @relation(fields: [createdById], references: [id])
-  datasetId    String?
-  dataset      Dataset? @relation(fields: [datasetId], references: [id])
-
-  @@index([category, status])
-  @@index([createdById])
-  @@index([createdAt])
-  @@index([datasetId])
 }
 
 model AuditLog {
