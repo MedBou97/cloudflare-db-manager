@@ -22,7 +22,7 @@
   },
   "vars": {
     "WEBAUTHN_APP_NAME": "rwsdk-db-manager",
-    "APP_BASE_URL": "https://your-production-domain.com"
+    "APP_BASE_URL": "https://rwsdk-db-manager.aabdellahi299.workers.dev"
   },
   "migrations": [
     {
