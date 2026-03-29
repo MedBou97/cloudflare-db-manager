@@ -111,7 +111,7 @@ export const handleRegister = async (formData: FormData) => {
 
   const resend = new Resend(env.RESEND_API);
   const { data, error } = await resend.emails.send({
-    from: "Acme <onboarding@resend.dev>",
+    from: "verify@dbmanager.darlein.com",
     to: email as string,
     subject: "Welcome to our app",
     text: `Welcome to our app. Please verify your account by clicking the
@@ -182,7 +182,7 @@ export const handleForgotPassword = async (formData: FormData) => {
   // send the reset token to the user's email
   const resend = new Resend(env.RESEND_API);
   const { data, error } = await resend.emails.send({
-    from: "Acme <onboarding@resend.dev>",
+    from: "reset@dbmanager.darlein.com",
     to: email as string,
     subject: "Reset Your Password",
     text: `Reset your password by clicking the link below: ${Constants.BASE_URL}/reset?token=${resetToken}`,

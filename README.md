@@ -26,8 +26,8 @@ A role-based vector data management application built on **RedwoodSDK** and depl
 ### Roles
 | Role | Capabilities |
 |---|---|
-| `USER` | View records & logs |
-| `ADMIN` | Create, edit, delete records; full log access |
+| `USER` | View records & logs; read-only access to database tables |
+| `ADMIN` | Create, edit, delete records; full log access; manage database connections; full CRUD on database tables |
 
 ### Vector Records
 - Fields: label, description, category, source, tags (JSON array), numeric value, confidence, vector (JSON float array), dimension, metadata (JSON object), status (`active` / `inactive` / `pending`), version
@@ -35,6 +35,17 @@ A role-based vector data management application built on **RedwoodSDK** and depl
 - Delete with confirmation dialog
 - Collapsible detail view with full vector and metadata display
 - Paginated list with search, category filter, status filter, sort field + order
+
+### Database Browser
+- **Connect to PostgreSQL** — manage encrypted connection credentials, test connections
+- **Browse tables** — view table schemas with column metadata (data type, nullable, defaults, primary keys)
+- **Inline row editing** — edit cells directly without JSON prompts; type-aware inputs for booleans, numbers, JSON objects, and text
+- **Two-step delete confirmation** — Delete button becomes Confirm/Cancel for safety, no browser popup
+- **Search & filter** — search by column value, filter by specific columns, sort ascending/descending
+- **Insert rows** — JSON prompt-based insertion (to be replaced with inline form in next phase)
+- **SQL editor** — execute arbitrary SQL queries with guardrails (read/write detection, destructive query confirmation)
+- **Admin-only access** — full CRUD gated by admin role or connection ownership
+- **Audit logging** — all mutations (insert/update/delete) logged with user & timestamp
 
 ### Audit Log
 - Every create / edit / delete action is written to `AuditLog`
@@ -55,6 +66,24 @@ Tailwind CSS v4 is used throughout. The custom theme is defined in `src/app/styl
 ```
 
 A small critical CSS block is inlined in `Document.tsx` to set the background gradient before the JS bundle loads (preventing flash of unstyled content).
+
+### UI Patterns
+
+**Inline Editing** — Table rows support direct cell editing with type-aware controls:
+- Boolean → `<select>` (true/false/NULL)
+- Numbers → `<input type="number">`
+- JSON/Objects → `<textarea>` with monospace font
+- Text → `<input type="text">`
+- Field updates validated on save with inline error feedback
+
+**Delete Confirmation** — Two-step confirmation replaces browser popups:
+1. Click Delete button → row shows Confirm / Cancel options
+2. Click Confirm to proceed or Cancel to dismiss
+
+**Filter Bar** — Styled to match records UI with consistent spacing and interaction patterns
+- Search by value or specific column
+- Sort by column and direction
+- Apply and Clear buttons for filter state management
 
 ## Security
 
