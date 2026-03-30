@@ -1,3 +1,5 @@
+import stylesUrl from "./styles.css?url";
+
 export const Document: React.FC<{
   children: React.ReactNode;
   rw?: { nonce: string };
@@ -37,6 +39,7 @@ export const Document: React.FC<{
         />
         <title>DB Manager</title>
         <link rel="modulepreload" href="/src/client.tsx" />
+        <link rel="stylesheet" href={stylesUrl} />
         <style>{criticalCss}</style>
         <script nonce={rw?.nonce} dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>

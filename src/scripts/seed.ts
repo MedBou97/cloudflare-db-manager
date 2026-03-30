@@ -3,7 +3,7 @@ import { db, setupDb } from "@/db";
 import bcrypt from "bcryptjs";
 
 export default defineScript(async ({ env }) => {
-  setupDb(env);
+  await setupDb(env);
 
   const hashedPassword = await bcrypt.hash("password123", 10);
 
