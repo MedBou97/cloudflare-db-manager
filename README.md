@@ -27,7 +27,7 @@ A role-based vector data management application built on **RedwoodSDK** and depl
 | Role | Capabilities |
 |---|---|
 | `USER` | View records & logs; read-only access to database tables |
-| `ADMIN` | Create, edit, delete records; full log access; manage database connections; full CRUD on database tables |
+| `ADMIN` | CRUD records; \ log access; manage database connections; full CRUD on database tables |
 
 ### Vector Records
 - Fields: label, description, category, source, tags (JSON array), numeric value, confidence, vector (JSON float array), dimension, metadata (JSON object), status (`active` / `inactive` / `pending`), version
