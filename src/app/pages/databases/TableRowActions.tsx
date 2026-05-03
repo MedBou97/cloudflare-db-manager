@@ -14,6 +14,7 @@ type Props = {
   rowKey: string;
   showActions: boolean;
   disabledReason?: string;
+  hiddenColumnNames?: Set<string>;
 };
 
 const fieldInputClass =
@@ -109,6 +110,7 @@ export function TableRowActions({
   rowKey,
   showActions,
   disabledReason,
+  hiddenColumnNames,
 }: Props) {
   const [pending, startTransition] = useTransition();
   const [expanded, setExpanded] = useState(false);
@@ -144,8 +146,12 @@ export function TableRowActions({
   const titleColumn = columns.find((column) => !column.isPrimaryKey) ?? columns[0];
   const titleValue = titleColumn ? toDraftValue(row[titleColumn.name]) : "Row";
 
-  const summaryColumns = columns.filter((column) => !shouldExpandColumn(column, row[column.name]));
-  const detailColumns = columns.filter((column) => shouldExpandColumn(column, row[column.name]));
+  const visibleColumns = hiddenColumnNames && hiddenColumnNames.size > 0
+    ? columns.filter((col) => !hiddenColumnNames.has(col.name))
+    : columns;
+
+  const summaryColumns = visibleColumns.filter((column) => !shouldExpandColumn(column, row[column.name]));
+  const detailColumns = visibleColumns.filter((column) => shouldExpandColumn(column, row[column.name]));
 
   const onSave = () => {
     if (!primaryKeyValues) return;

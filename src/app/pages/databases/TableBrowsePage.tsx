@@ -3,6 +3,7 @@ import { AppShell } from "@/app/shared/AppShell";
 import { getTableRows } from "./actions";
 import { InsertRowButton } from "./InsertRowButton";
 import { TableRowActions } from "./TableRowActions";
+import { ColumnVisibilityMenu } from "./ColumnVisibilityMenu";
 
 const filterControlClass =
   "px-4 py-2.5 border border-[var(--c-border-input)] rounded-xl bg-[var(--c-bg-control)] text-[var(--c-text-secondary)] text-sm cursor-pointer outline-none";
@@ -22,6 +23,9 @@ export async function TableBrowsePage({ ctx, request }: RequestInfo) {
   const searchColumn = url.searchParams.get("searchColumn") ?? "";
   const sortColumn = url.searchParams.get("sortColumn") ?? "";
   const sortOrder = url.searchParams.get("sortOrder") === "asc" ? "asc" : "desc";
+  const hiddenColsParam = url.searchParams.get("hiddenCols") ?? "";
+  const hiddenCols = hiddenColsParam ? hiddenColsParam.split(",").filter(Boolean) : [];
+  const hiddenColsSet = new Set(hiddenCols);
 
   const result = await getTableRows({
     connectionId,
@@ -50,6 +54,7 @@ export async function TableBrowsePage({ ctx, request }: RequestInfo) {
       sortColumn,
       sortOrder,
       page: String(page),
+      hiddenCols: hiddenCols.join(","),
     };
     Object.assign(current, Object.fromEntries(Object.entries(updates).map(([k, v]) => [k, String(v)])));
     Object.entries(current).forEach(([k, v]) => {
@@ -57,6 +62,27 @@ export async function TableBrowsePage({ ctx, request }: RequestInfo) {
     });
     return `${basePath}?${params.toString()}`;
   };
+
+  const columnMenuEntries = data.columns.map((col) => {
+    const isHidden = hiddenColsSet.has(col.name);
+    const nextHidden = isHidden
+      ? hiddenCols.filter((c) => c !== col.name)
+      : [...hiddenCols, col.name];
+    const params = new URLSearchParams();
+    const vals: Record<string, string> = {
+      search,
+      searchColumn,
+      sortColumn,
+      sortOrder,
+      page: String(page),
+      hiddenCols: nextHidden.join(","),
+    };
+    Object.entries(vals).forEach(([k, v]) => {
+      if (v && !(k === "page" && v === "1")) params.set(k, v);
+    });
+    const qs = params.toString();
+    return { name: col.name, visible: !isHidden, toggleUrl: qs ? `${basePath}?${qs}` : basePath };
+  });
 
   return (
     <AppShell user={ctx.user} currentPath="/databases">
@@ -126,6 +152,8 @@ export async function TableBrowsePage({ ctx, request }: RequestInfo) {
           Apply
         </button>
 
+        <ColumnVisibilityMenu columns={columnMenuEntries} />
+
         {(search || searchColumn || sortColumn || sortOrder !== "desc") && (
           <a
             href={basePath}
@@ -165,6 +193,7 @@ export async function TableBrowsePage({ ctx, request }: RequestInfo) {
               showActions={data.canMutate}
               primaryKeyValues={pkValues}
               disabledReason={!data.hasPrimaryKey ? "No primary key" : undefined}
+              hiddenColumnNames={hiddenColsSet}
             />
           );
         })}
