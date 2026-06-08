@@ -1,0 +1,303 @@
+\chapter{Introduction}
+
+
+With exponential growth of data in our today's life because of the use of modern technologies such as internet relational data bases has been an indispensable thing, instead of having to deal with heavy desktop applications that requires local installation or web applications that rely on host servers in this project our aim is to design and create web interface for users to connect and manage their databases like PostgreSQL from the web browser instead of downloading heavy databases and having to deal with setup problems, this web application will also provide many other features such as a new creative way of viewing rows of data such as Card Views. It will also support high-dimensional vector embeddings. Users will also be able to view the log history of all the actions done on the provided databases the technologies like edge computing and serverless functions that is will be used in this project aim to provide a faster and more reliable and highly secure database tool that can be used from any device. 
+
+ To better understand the foundation and the work done in this project the skills,knowledge and prerequisites needed for this project is good understanding frontend development using react and how the front end communicates with the backend using Apis , relational databases and SQL concepts like SQL commands, serverless and edge computing and finally Object-Relational Mappers (ORMs) like Prisma.
+\section{Objective}
+
+
+
+
+Our primary objective and motivation of this project is to develop and design a highly responsive and light weight database web application instead of relying on desktop bounded applications. It will provide an isolated workspace where users can authenticate, configure their database credentials, and manage connections without effecting security. it will also feature a built-in SQL editor that will process and interpret SQL queries on the go. In Addition to having some creative new features on viewing data records by introducing dynamic data visualization, users can easily change between traditional table grids and modern, visual 'Card Views' to better analyze media-rich records. Besides, to keep with the modern AI-driven applications, this tool supports high-dimensional vector embeddings. It includes a dedicated semantic search interface where users can adjust mathematical similarity thresholds to find and rank conceptually related records. The web based app is going to utilizes some modern technologies like serverless functions and edge computing, the databases will be managed by users anywhere and from any device, serverless computing will also allow users to run the application without the need for them to manage hardware and virtual servers that run 24/7, automatically scaling the servers based on demand. Edge computing will also provide a fast, smooth experience by deploying serverless functions all over the world so users can have an instantaneous response regardless of their location meaning it will be geographically closer to the user.
+
+\section{Preliminary Study}
+
+
+Before the development of the database management system a preliminary research was conducted. Our aim was to analyze the current similar database management systems that are available. Usually, interacting with relational databases requires developers to rely on two main categories of software one is heavy desktop clients and server-hosted web applications. Some of the Desktop based applications like DBeaver and DataGrip offer advanced features but requires local installation on the user's machine and complex network configurations. Thus it is not portable and the user can not access the database from different devices. on the other hand there are some web based applications like phpMyAdmin, while they solve the portability issue they introduce other disadvantages such as requiring the user to purchase a dedicated host server that requires extra effort to maintain the server 24/7 . This might cause security issues and extra costs on the users. And they might be slower than the serverless functions that are scattered in multiple locations by the edge computing technology to deliver a faster responses. Also both of these categories do not offer the Vector records feature that is the new creative way of viewing rows of data that is going to be designed in the web application.
+
+The analysis of the existing systems reveals a problem that we offer a solution to which is the need for a database tool that combines the portability of web applications and the benefits offered by the serverless workers.
+
+\chapter{SYSTEM ANALYSIS AND FEASIBILITY}
+\section{System Analysis}
+
+2.1. System Analysis
+
+The final product will be evaluated according to some performance metrics these metrics will be analyzed in the system analysis section. Firstly, the main purpose of the proposed web based database manager is to be a bridge or act as an intermediary between the end-user and their relational databases. This analysis will ensure a suitable architectural solution, it will provide the structure, the key elements and functions of the application so we can test whether the needs are met when the project is completed. Here is some performance metrics. 
+
+\begin{enumerate}
+    \item \textbf{Query Executing Correctness:} 
+    The SQL editor should execute the queries from the user without any data loss or corruption, data must be modified exactly as the user intended
+    \item \textbf{Stability:}  
+    The app connection to the users external remote databases should be stable, if the network cuts out or freeze the error will be handled gracefully  instead of crashing the users session.
+    \item \textbf{Handling The Complex Data Types:} 
+    The app will support some modern AI features it will be able to render complex data types and high dimension vector arrays.
+    \item \textbf{System Speed and Latency:} 
+     As it has been stated in the previous sections because of the app running on Cloudflare edge network API requests from the user will have a very fast responds with minimal latency.
+    
+\end{enumerate}
+
+
+
+
+
+
+
+
+
+
+
+
+
+\section{Requirement Analysis}
+
+
+The project requirements was determined by a mix of some researches of existing database managers some meetings with the project instructor. In conclusion, the main functions in the application were defined.
+
+The object-oriented approach was chosen for this project. Starting with the use case diagram that will define the flow of operations and actions by different users within the system.
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.6]{User Case .png}
+    \caption{User Case diagram}
+    \label{fig:image}
+\end{figure}
+
+Based on the use case diagram here is the main functional areas:
+
+1. Authentication:
+First the user is met with the login page a user can login to an existing account or create a new one. This will ensure that the data is secure and safe.
+
+2. Manage Connections:
+User can view all saved databases and provide the credentials of a new one, the user will be able to ensure the connection with a click of a button.
+
+3. Browse Schema and Tables:
+The users will be able to view the existing schemas and rows of tables they will be able to create, update delete rows of data.
+
+4. Dynamic Views and Vector Search:
+User will be able to switch between cards view and vector arrays, users can launch a semantic search to find and rank conceptually similar records based on mathematical thresholds.
+
+5. Execute SQL Query:
+The builtin SQL editor will execute the users SQL commands
+
+Moving to the UML diagram :
+\begin{figure}[H]
+    \centering
+    
+    \includegraphics[scale=0.4]{UML.jpg}
+    \caption{UML diagram}
+    \label{fig:image}
+\end{figure}
+In this three tier architecture the data flows from the top to the bottom. All actions in the first layer doesn't interact with the database directly . First comes the presentation layer this layer represent the React interface that the user is going to interact with it includes some actions like viewing the tables, triggering SQL queries, viewing the history log. Then we have the logic tier that perform all the tasks running on Cloudflare Workers that comes from the first layer it is like the brain that handles security, processes rules, authorizing users and much more. Finally the third layer the data access tier that handles the storage. After the request comes from first layer and gets verified by the second layer this layer executes the SQL commands and fetches data from the database.
+
+
+
+
+
+
+
+
+
+
+
+\section{Feasibility}
+
+\subsection{Technical Feasibility}
+
+
+The technologies and softwares required to fully and successfully design and implement this project will be evaluated in the technical feasibility study. The following development tools and applications were chosen for the advantages they offer.
+\subsubsection{Software Feasibility}
+    The project will implement RedwoodSDK framework the main language in this project is Typescript, which was used for both the front and the backend instead of JavaScript for the extra advantages it offers. Standard HTML and tailwind CSS are also used.
+
+    The user interface is built using React, which makes it easy to handle parts of the app dynamically (such as interactive data grids and SQL editors).The development environment relies on \textbf{Node.js} and \textbf{pnpm} for fast package management. Dev tools like git and and GitHub are utilized for codebase tracking and version control. and lastly the IDE used is vs code.
+
+     Cloudflare Workers were used instead of traditional servers like nodejs. Cloudflare Workers alows requests from the users to run on a global scale ensuring minimal latency
+
+    Database Management :\textbf{Prisma ORM} (Object-Relational Mapper) had been employed in this project to securely and easily connect to user databases. Prisma provides a very secure, type-safe query builder that acts as the bridge between the Cloudflare Worker backend and the external databases.
+
+    
+
+
+\subsubsection{Hardware Feasibility}
+
+
+because this project is web based there was no need for any physical servers ,it was hosted in the cloud ,end Users will not need any special hardware or high-performance computers to use this application. Any device that has a search engine can be used.
+
+The entire coding, testing, and deployment process of the project is being carried out on a personal laptop. Here are the specifications of the development pc:
+
+Processor: 13th Gen Intel(R) Core(TM) i7-8565U 
+Operating System: Linux
+RAM: 16.0 GB
+
+These specifications are more than enough to run all the necessary development tools like Visual Studio Code, Node.js, and Vite.
+
+
+\subsection{Legal Feasibility}
+All resources used in this project are open sources so there is no violations. All processes are carried out legally and personal data is protected.
+
+\subsection{Economic Feasibility}
+The economic feasibility is broken down into three categories:
+
+\begin{itemize}
+    \item \textbf{Labor Costs:} A team of two students is developing this as a graduation project so no labor costs was included.
+
+    \item \textbf{Hosting and Hardware Costs:} By employing the free tiers of Cloudflare Workers and Cloudflare Pages for deployment the cost of hosting the web application and running the serverless backend is zero during the development and initial launch phases.
+
+    \item \textbf{Software Costs:} 
+    Every development tool used (Visual Studio Code, Node.js, Git, pnpm) is completely free.
+
+    
+\end{itemize}
+
+
+\chapter{APPLICATION RESULTS AND TESTING}
+
+\section{Application Overview}
+
+This section explains the runnable components of the implemented software, maps user workflows to the actual application modules, and defines the scope of the performed tests. The application is a web-based database management system running on Cloudflare Workers. The presentation layer is implemented with React and TypeScript, the business logic layer is executed on serverless workers, and internal state is managed through Prisma ORM. External database operations are executed through user-defined PostgreSQL connections.
+
+Each core workflow is reflected in dedicated application screens. In the authentication workflow, users can complete registration, login, email verification, and password reset steps. In the connection management workflow, users can create, save, and test new database profiles. The SQL Editor screen supports raw SQL execution, while the Table Browse screen supports row-level viewing, update, and delete operations. The audit log screen records critical operations with timestamps to provide end-to-end traceability.
+
+The tests in this section were planned to align with the four primary metrics defined in the analysis chapter: (i) query correctness, (ii) stability and error behavior, (iii) data integrity, and (iv) performance and latency. Therefore, the reported test results provide both execution evidence and quantitative indicators of requirement fulfillment.
+
+
+\section{Test Results}
+
+\subsection{Test Environment and Method}
+
+Unit tests were implemented with Vitest and executed in a Node-based test environment. The test suite focuses on deterministic helper logic that directly affects security and query-safety behavior. The following files were executed:
+\begin{itemize}
+    \item \texttt{tests/unit/auth-guards.test.ts}
+    \item \texttt{tests/unit/access-control.test.ts}
+    \item \texttt{tests/unit/crypto.test.ts}
+    \item \texttt{tests/unit/sql-guards.test.ts}
+\end{itemize}
+The suite was run with \texttt{pnpm run test:run}. At the time of reporting, all tests passed: 4 files, 19 tests, 0 failures.
+
+\subsection{Functional and System Test Results}
+
+\begin{table}[H]
+    \centering
+    \caption{Unit Test Summary}
+    \label{tab:test-summary}
+    \begin{tabular}{|p{0.10\textwidth}|p{0.30\textwidth}|p{0.18\textwidth}|p{0.18\textwidth}|p{0.10\textwidth}|}
+        \hline
+        \textbf{Test ID} & \textbf{Scenario} & \textbf{Expected Result} & \textbf{Observed Result} & \textbf{Status} \\
+        \hline
+        UT1 & Encrypt/decrypt round-trip with same secret & Original payload is restored & Payload restored exactly & PASS \\
+        \hline
+        UT2 & Key version prefix check & Output starts with provided version & Prefix validated (e.g. \texttt{7.}) & PASS \\
+        \hline
+        UT3 & Invalid encrypted payload format & Decrypt should throw explicit error & Expected error thrown & PASS \\
+        \hline
+        UT4 & Wrong-secret decryption attempt & Decrypt should fail & Exception thrown as expected & PASS \\
+        \hline
+        UT5 & Encrypted payload structure validation & Payload has 3 dot-separated parts & Structure validated & PASS \\
+        \hline
+        UT6 & Non-deterministic encryption check & Same input should produce different ciphertexts & Different ciphertexts observed & PASS \\
+        \hline
+        UT7 & SQL destructive command detection & DROP/UPDATE/ALTER are flagged & Destructive queries flagged & PASS \\
+        \hline
+        UT8 & SQL read-query detection & SELECT/WITH/SHOW/EXPLAIN recognized as read & Read queries recognized & PASS \\
+        \hline
+        UT9 & Multi-statement SQL detection & Multiple statements are detected & Detection logic passed & PASS \\
+        \hline
+        UT10 & Trailing-semicolon normalizer & Trailing semicolons removed correctly & Normalization passed & PASS \\
+        \hline
+        UT11 & Non-semicolon query preservation & Query text remains unchanged & Preservation passed & PASS \\
+        \hline
+        UT12 & Unicode payload round-trip & Unicode payload survives encrypt/decrypt & Unicode preserved & PASS \\
+        \hline
+        UT13 & Login credentials presence validation & Missing username/password should be rejected & Validation behavior passed & PASS \\
+        \hline
+        UT14 & Reset payload presence validation & Missing token/password fields should be rejected & Validation behavior passed & PASS \\
+        \hline
+        UT15 & Password match check in reset flow & Mismatched passwords should fail & Match check passed & PASS \\
+        \hline
+        UT16 & Reset token expiry check & Expired token should be flagged & Expiry logic passed & PASS \\
+        \hline
+        UT17 & Verified-user recognition & Verified users are identified correctly & Role-independent verification passed & PASS \\
+        \hline
+        UT18 & USER vs ADMIN distinction & ADMIN true and USER false for admin check & Role separation passed & PASS \\
+        \hline
+        UT19 & Mutation permission policy & Only verified ADMIN can mutate rows & Permission check passed & PASS \\
+        \hline
+    \end{tabular}
+\end{table}
+
+\subsection{Evaluation of Results}
+
+The unit test suite validates both confidentiality-related behavior and SQL safety checks. Encryption helpers were tested for correct round-trip behavior, strict format handling, incorrect-secret rejection, output structure, non-deterministic ciphertext generation, and Unicode safety.
+
+SQL guard helpers were tested for destructive command detection, read-query classification, multi-statement rejection logic, and query normalization behavior. These checks reduce the risk of unsafe query execution paths in higher-level modules.
+
+Authentication guard helpers were tested for required login/reset payload checks, password confirmation matching, and token-expiry handling. Role-based access helpers were tested to explicitly verify the behavioral difference between USER and ADMIN accounts, including mutation permission checks.
+
+All unit tests passed in the current run (19/19). Therefore, the helper-layer logic included in this test scope is considered stable for the tested scenarios.
+
+
+\section{Validation}
+
+\subsection{Requirement Traceability Matrix}
+
+\begin{table}[H]
+    \centering
+    \caption{Requirement Validation Matrix}
+    \label{tab:validation-matrix}
+    \begin{tabular}{|p{0.24\textwidth}|p{0.16\textwidth}|p{0.30\textwidth}|p{0.12\textwidth}|}
+        \hline
+        \textbf{Requirement} & \textbf{Related Test} & \textbf{Evidence} & \textbf{Status} \\
+        \hline
+        SQL safety and guard correctness & UT7, UT8, UT9, UT10, UT11 & Unit tests in \texttt{tests/unit/sql-guards.test.ts} & Verified \\
+        \hline
+        Encryption and secret-handling correctness & UT1, UT2, UT3, UT4, UT5, UT6, UT12 & Unit tests in \texttt{tests/unit/crypto.test.ts} & Verified \\
+        \hline
+        Login and reset-auth validation logic & UT13, UT14, UT15, UT16 & Unit tests in \texttt{tests/unit/auth-guards.test.ts} & Verified \\
+        \hline
+        Role-based USER vs ADMIN behavior & UT17, UT18, UT19 & Unit tests in \texttt{tests/unit/access-control.test.ts} & Verified \\
+        \hline
+        Unit test execution reliability & UT1-UT19 & \texttt{pnpm run test:run} output: 19 passed, 0 failed & Verified \\
+        \hline
+    \end{tabular}
+\end{table}
+
+\subsection{Final Validation Verdict}
+
+Based on the overall validation results, the tested helper layer satisfies the defined unit-test scope. Crypto, SQL guard, login/reset validation, and role-based access behaviors consistently produced expected outputs across positive and negative cases.
+
+Future iterations should extend this coverage with integration tests for auth/database action modules and end-to-end scenario tests for complete user workflows.
+overall the whole project will almost not cost anything.
+
+\subsection{Labor and Time Feasibility}
+
+Only two students worked on this project. All the work done from fully developing the whole project to finishing and submitting the project report was divided over a period of approximately 4 months the development life-cycle has been planned from February 2026 through June 2026.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{Gantt.png}
+    \caption{Gantt diagram}
+    \label{fig:image}
+\end{figure}
+
+
+\begin{itemize}
+    \item \textbf{Weeks 1-2 } 
+
+    Project Initiation , Feasibility study and System Analysis
+
+    \item \textbf{Weeks 3-5 }
+
+    System Architecture And Design, drawing the diagrams and the first submission of the report.
+    
+    \item \textbf{Weeks 6-12}
+    
+    This phase involves building both the frontend and the backend, from designing the whole interface that the user is going to interact with to setting up the serverless environment, configuring the database ORM (Prisma), and establishing secure connectivity to external databases and lastly submitting the second report.
+    \item \textbf{ Weeks 13-14}
+
+    System Testing, bugs and errors fixing and performance auditing.
+    \item \textbf{ Weeks 15-17}
+    
+    Final report preparation and documentation and Project presentation.
+    
+\end{itemize}
+
+

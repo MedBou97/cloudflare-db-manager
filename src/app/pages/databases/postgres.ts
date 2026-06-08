@@ -433,3 +433,10 @@ export async function executeSqlWithGuardrails(connectionString: string, input: 
     return { error: message };
   }
 }
+
+export const __testables = {
+  stripTrailingSemicolon,
+  isPotentiallyDestructiveSql,
+  isReadQuery,
+  hasMultipleStatements,
+};

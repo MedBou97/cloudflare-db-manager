@@ -5,6 +5,7 @@ import { requestInfo } from "rwsdk/worker";
 import { ROLES, AUDIT_ACTIONS } from "@/app/shared/constants";
 import { logAction } from "@/app/pages/records/actions";
 import { env } from "cloudflare:workers";
+import { canMutateDatabaseRows, isAdminUser } from "@/app/shared/accessControl";
 import { encryptSecretPayload, decryptSecretPayload } from "./crypto";
 import {
   testPostgresConnection,
@@ -291,7 +292,7 @@ export async function getTableRows(input: GetTableRowsInput): Promise<GetTableRo
       data: {
         ...data,
         connectionName: resolved.connection.name,
-        canMutate: resolved.ctx.user?.role === ROLES.ADMIN,
+        canMutate: canMutateDatabaseRows(resolved.ctx.user),
       },
     };
   } catch (error) {
@@ -311,7 +312,7 @@ type RowMutationInput = {
 };
 
 function isAdmin(ctx: AccessResolved["ctx"]) {
-  return ctx.user?.role === ROLES.ADMIN;
+  return isAdminUser(ctx.user);
 }
 
 export async function insertTableRow(input: RowMutationInput) {

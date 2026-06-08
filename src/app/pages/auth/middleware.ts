@@ -3,7 +3,7 @@ import { RouteMiddleware } from "rwsdk/router";
 import { env } from "cloudflare:workers";
 import { db, setupDb } from "@/db";
 import { sessions, setupSessionStore } from "@/session/store";
-import { ROLES } from "@/app/shared/constants";
+import { isAdminUser, isVerifiedUser } from "@/app/shared/accessControl";
 
 export const redirectToLogin = () => {
   return new Response(null, {
@@ -44,7 +44,7 @@ export const loadAuthContext =
 export const requireVerified =
   (): RouteMiddleware =>
   ({ ctx, headers }) => {
-    if (!ctx.user || !ctx.user.verified) {
+    if (!isVerifiedUser(ctx.user)) {
       return redirectToLogin();
     }
     headers.set("Cache-Control", "no-store");
@@ -53,10 +53,10 @@ export const requireVerified =
 export const requireAdmin =
   (): RouteMiddleware =>
   ({ ctx, headers }) => {
-    if (!ctx.user || !ctx.user.verified) {
+    if (!isVerifiedUser(ctx.user)) {
       return redirectToLogin();
     }
-    if (ctx.user.role !== ROLES.ADMIN) {
+    if (!isAdminUser(ctx.user)) {
       return new Response("Forbidden", { status: 403 });
     }
     headers.set("Cache-Control", "no-store");

@@ -7,6 +7,12 @@ import { requestInfo } from "rwsdk/worker";
 import { Resend } from "resend";
 import { env } from "cloudflare:workers";
 import { Constants } from "@/app/shared/constants";
+import {
+  hasLoginCredentials,
+  hasResetPayload,
+  isTokenExpired,
+  passwordsMatch,
+} from "./authGuards";
 
 export const handleLogin = async (formData: FormData) => {
   const { request, headers } = requestInfo;
@@ -14,7 +20,7 @@ export const handleLogin = async (formData: FormData) => {
   const password = formData.get("password");
 
   // validate the form
-  if (!username || !password) {
+  if (!hasLoginCredentials(username, password)) {
     console.log("All fields are required");
     return {
       error: "All fields are required",
@@ -201,12 +207,12 @@ export const handleResetPassword = async (formData: FormData) => {
   const password = formData.get("password");
   const confirmPassword = formData.get("confirmPassword");
 
-  if (!token || !password || !confirmPassword) {
+  if (!hasResetPayload(token, password, confirmPassword)) {
     return { success: null, error: "All fields are required" };
   }
 
   // check to see if the password and confirm password match
-  if (password !== confirmPassword) {
+  if (!passwordsMatch(password, confirmPassword)) {
     return { success: null, error: "Passwords do not match" };
   }
 
@@ -226,7 +232,7 @@ export const handleResetPassword = async (formData: FormData) => {
   }
 
   // check to see if the token has expired
-  if (user.resetTokenExpires && user.resetTokenExpires < new Date()) {
+  if (isTokenExpired(user.resetTokenExpires)) {
     return { success: null, error: "Token has expired" };
   }
 
