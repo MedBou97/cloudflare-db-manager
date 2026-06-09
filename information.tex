@@ -1,0 +1,135 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%% Aşağıda istenilen bilgileri dikkatlice doldurunuz.   %%%%%%%%
+%%%%%%%%% Doldurmanız istenilen ifadenin sonunda TR ya da EN   %%%%%%%%
+%%%%%%%%% yazıyorsa, sırasıyla Türkçe veya İngilizce olarak    %%%%%%%%
+%%%%%%%%% doldurunuz. Eğer herhangi bir ifade yoksa, projenizi %%%%%%%%
+%%%%%%%%% hangi dilde yazıyorsanız (Türkçe veya İngilizce), o  %%%%%%%%
+%%%%%%%%% dile göre doldurunuz. İsimleri yazarken soyisimleri  %%%%%%%%
+%%%%%%%%% büyük harf ile yazınız.                              %%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+% Proje başlığını Türkçe olarak yazınız.
+\def\titleTR{ POSTGRES VERİTABAN YÖNETİCİSİ }
+
+% Proje başlığını İngilizce olarak yazınız.
+\def\titleEN{ POSTGRES DATABASE MANAGER }
+
+% Proje grubundaki ilk ismi yazınız.
+\def\studenti{Mohamed Abdellah BOU}
+%İlk öğrencinin, öğrenci numarasını yazınız.
+\def\numberi{23011935}
+% Proje grubundaki ilk öğrencinin doğum tarihi ve yerini yazınız.
+\def\studentibdate{16.07.2003, Magalahjar }
+% Proje grubundaki ilk öğrencinin e-mail adresini yazınız.
+\def\studentiemail{mohamed.bou@std.yildiz.edu.tr}
+% Proje grubundaki ilk öğrencinin cep telefonu numarasını yazınız.
+\def\studentiphone{ 0 552 650 56 18}
+% Proje grubundaki ilk öğrencinin staj deneyimlerini yazınız. Satır atlatmak için \\ kullanabilirsiniz.
+\def\studentiintern{Yok / None}
+
+% Proje grubundaki ikinci ismi yazınız. Eğer ikinci üye yoksa ~ işareti ekleyiniz ve ikinci
+% öğrenci ile alakalı diğer bilgileri atlayınız.
+\def\studentii{Zoaber Osama ALKATMAH}
+%İkinci öğrencinin, öğrenci numarasını yazınız.
+\def\numberii{21011933}
+% Proje grubundaki ikinci öğrencinin doğum tarihi ve yerini yazınız.
+\def\studentiibdate{15.01.2004, RIYADH}
+% Proje grubundaki ikinci öğrencinin e-mail adresini yazınız.
+\def\studentiiemail{zoaber.alkatmah@std.yildiz.edu.tr}
+% Proje grubundaki ikinci öğrencinin cep telefonu numarasını yazınız.
+\def\studentiiphone{ 05421951204}
+% Proje grubundaki ikinci öğrencinin staj deneyimlerini yazınız. Satır atlatmak için \\ kullanabilirsiniz.
+\def\studentiiintern{Yok / None}
+
+% Projeyi teslim ettiğiniz ay ve yılı proje için kullandığınız dilde yazınız.
+\def\date{Mart, 2026}
+
+% Proje danışmanınızın ismini Türkçe ünvanı ile yazınız.
+\def\advisorTR{Doç.Dr. Oğuz ALTUN}
+% Proje danışmanınızın ismini İngilizce ünvanı ile yazınız.
+\def\advisorEN{Doç.Dr. Oğuz ALTUN}
+
+\def\acknowledgementText{
+    % Buraya teşekkür metninizi proje için kullandığınız dilde yazınız. 
+
+
+
+We would like to express our gratitude to our supervisor for this project Doç.Dr. Oğuz ALTUN for giving us the opportunity to work under his guidance on this project and their valuable insights and advices.
+
+Special thanks to the faculty of the Computer engineering department at Yildiz Technical University for providing the knowledge and giving us the opportunity to conduct our computer project.
+
+WE owe a debt of gratitude to our parents for their sacrifices and encouragement over the past few years.
+}
+
+\def\abstractTextEnglish{
+    % Buraya İngilizce olarak proje özetini yazınız.
+This project presents a web-based Postgres database manager developed on a serverless architecture. The system provides authentication, role-based access control, encrypted database connection profile storage, SQL query execution with safety guardrails, table-level data operations, and audit logging for traceability. The implementation uses React and TypeScript on the presentation side, Cloudflare Workers in the logic layer, and Prisma for internal data management. To validate core reliability and security behavior, a unit-test suite was implemented with Vitest, covering crypto helpers, SQL guard logic, authentication guards, and USER-versus-ADMIN access control. The current test run reports 19 passing tests out of 19, indicating consistent helper-layer behavior for the tested scenarios.
+}
+
+
+\def\abstractKeywordsEnglish{
+    % Buraya İngilizce olarak proje için geçerli anahtar kelimeleri yazınız
+    PostgreSQL, serverless computing, role-based access control, SQL guardrails, audit logging
+}
+
+\def\abstractTextTurkish{
+    % Buraya Türkçe olarak proje özetini yazınız
+ Bu asamada ozetin nihai metni Ingilizce olarak tamamlanmistir. Turkce ozet, ayni teknik icerik korunarak nihai teslim oncesinde duzenlenecektir.
+
+}
+
+\def\abstractKeywordsTurkish{
+    % Buraya Türkçe olarak proje için geçerli anahtar kelimeleri yazınız
+   PostgreSQL, sunucusuz bilisim, rol tabanli erisim kontrolu, SQL koruma kurallari, denetim kayitlama
+}
+
+% Proje için gerekli olan sistem ve yazılım bilgilerini yazınız.
+\def\software{ Linux İşletim Sistemi, TypeScript }
+
+% Proje için gerekli olan RAM bellek boyutunu yazınız.
+\def\memorysize{2GB}
+
+% Proje için gerekli olan harddisk boyutunu yazınız.
+\def\disksize{256MB}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%% Aşağıdaki alana "\item[sembol] Sembol_açıklaması" %%%%%%%
+%%%% şeklinde sembollerinizi giriniz. Açıklamanın ilk  %%%%%%%
+%%%% harfine göre sıralayınız. Eğer sembol kullanmı-   %%%%%%%
+%%%% yorsanız "\def\symbols{}" olacak şekilde küme     %%%%%%%
+%%%% parantezlerinin içini siliniz.                    %%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\def\symbols{
+
+    \begin{abbrv}
+        
+        
+    \end{abbrv}
+
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%% Aşağıdaki alana "\item[kısaltma] kısaltma_açıklaması" %%%
+%%%% şeklinde kısaltmalarınızı giriniz. Kısaltmanın ilk    %%%
+%%%% harfine göre sıralayınız. Eğer kısaltma kullanmıyor-  %%%
+%%%% sanız "\def\abbrevations{}" olacak şekilde küme pa-   %%%
+%%%% rantezlerinin içini siliniz.                          %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\abbrevations{
+
+    \begin{abbrv}
+        \item[AI]               artificial intelligence
+        \item[CSS]              Cascading Style Sheets
+        \item[HTML]             Hypertext Markup Language
+        \item[IDE]              Integrated Development Environment
+        \item[ORM]              Object-Relational Mapping
+        \item[pnpm]             Performant Node Package Manager
+        \item[SQL]              Structured Query Language
+        \item[UML]              Unified Modeling Language
+    \end{abbrv}
+    
+}
