@@ -7,6 +7,7 @@ declare namespace Cloudflare {
 		WEBAUTHN_RP_ID: string;
 		APP_BASE_URL: string;
 		AUTH_SECRET_KEY: string;
+        DB_CONNECTION_ENCRYPTION_KEY: string;
 		RESEND_API: string;
 		SESSION_DURABLE_OBJECT: DurableObjectNamespace<import("./src/worker").SessionDurableObject>;
 		DB: D1Database;

@@ -4,8 +4,11 @@ import { db } from "@/db";
 import { requestInfo } from "rwsdk/worker";
 import { ROLES, AUDIT_ACTIONS } from "@/app/shared/constants";
 import { logAction } from "@/app/pages/records/actions";
-import { env } from "cloudflare:workers";
 import { encryptSecretPayload, decryptSecretPayload } from "./crypto";
+import {
+  getDatabaseConnectionEncryptionKey,
+  MISSING_DB_CONNECTION_ENCRYPTION_KEY_ERROR,
+} from "./encryptionKey";
 import {
   testPostgresConnection,
   getTableRows as fetchTableRows,
@@ -82,9 +85,9 @@ export async function createDatabaseConnection(formData: FormData): Promise<Crea
     return { error: "Unauthorized", connectionId: null };
   }
 
-  const encryptionSecret = env.DB_CONNECTION_ENCRYPTION_KEY;
+  const encryptionSecret = getDatabaseConnectionEncryptionKey();
   if (!encryptionSecret) {
-    return { error: "Server is missing DB_CONNECTION_ENCRYPTION_KEY.", connectionId: null };
+    return { error: MISSING_DB_CONNECTION_ENCRYPTION_KEY_ERROR, connectionId: null };
   }
 
   const name = (formData.get("name") as string | null)?.trim() ?? "";
@@ -166,9 +169,9 @@ export async function testSavedDatabaseConnection(connectionId: string) {
     return { error: "Unauthorized" as const };
   }
 
-  const encryptionSecret = env.DB_CONNECTION_ENCRYPTION_KEY;
+  const encryptionSecret = getDatabaseConnectionEncryptionKey();
   if (!encryptionSecret) {
-    return { error: "Server is missing DB_CONNECTION_ENCRYPTION_KEY." as const };
+    return { error: MISSING_DB_CONNECTION_ENCRYPTION_KEY_ERROR };
   }
 
   const connection = await db.databaseConnection.findUnique({ where: { id: connectionId } });
@@ -229,9 +232,9 @@ async function resolveDatabaseConnectionAccess(connectionId: string): Promise<Ac
     return { error: "Unauthorized" };
   }
 
-  const encryptionSecret = env.DB_CONNECTION_ENCRYPTION_KEY;
+  const encryptionSecret = getDatabaseConnectionEncryptionKey();
   if (!encryptionSecret) {
-    return { error: "Server is missing DB_CONNECTION_ENCRYPTION_KEY." };
+    return { error: MISSING_DB_CONNECTION_ENCRYPTION_KEY_ERROR };
   }
 
   const connection = await db.databaseConnection.findUnique({ where: { id: connectionId } });

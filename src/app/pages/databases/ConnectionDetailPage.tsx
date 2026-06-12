@@ -1,9 +1,12 @@
 import type { RequestInfo } from "rwsdk/worker";
-import { env } from "cloudflare:workers";
 import { db } from "@/db";
 import { ROLES, AUDIT_ACTIONS } from "@/app/shared/constants";
 import { AppShell } from "@/app/shared/AppShell";
 import { decryptSecretPayload } from "./crypto";
+import {
+  getDatabaseConnectionEncryptionKey,
+  MISSING_DB_CONNECTION_ENCRYPTION_KEY_ERROR,
+} from "./encryptionKey";
 import { listPostgresTables } from "./postgres";
 import { logAction } from "@/app/pages/records/actions";
 import { TestConnectionButton } from "./TestConnectionButton";
@@ -30,9 +33,9 @@ export async function ConnectionDetailPage({ ctx, request }: RequestInfo) {
     return new Response("Forbidden", { status: 403 });
   }
 
-  const encryptionSecret = env.DB_CONNECTION_ENCRYPTION_KEY;
+  const encryptionSecret = getDatabaseConnectionEncryptionKey();
   if (!encryptionSecret) {
-    return new Response("Missing DB_CONNECTION_ENCRYPTION_KEY", { status: 500 });
+    return new Response(MISSING_DB_CONNECTION_ENCRYPTION_KEY_ERROR, { status: 500 });
   }
 
   let tables: { schema: string; name: string }[] = [];
