@@ -1,0 +1,143 @@
+
+\documentclass[conference]{IEEEtran}
+
+\IEEEoverridecommandlockouts
+\usepackage{graphicx}
+
+\usepackage[bitstream-charter]{mathdesign}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+\usepackage{amsmath, graphicx, setspace}
+
+\usepackage[lofdepth,lotdepth]{subfig}
+\usepackage[justification=centering, labelsep=space, figurewithin=none, tablewithin=none, labelfont=bf]{caption}
+\usepackage{multirow}
+\usepackage{array}
+
+\hyphenchar\font=-1
+\sloppy
+
+
+\begin{document}
+
+\title{Serverless Web Based Postgres Database Manager for Secure and Portable Data Operations}
+
+
+\author{
+  \IEEEauthorblockN{Mohamed Abdellah Bou, Zoaber Osama Alkatmah}
+  \IEEEauthorblockA{Computer Engineering Department\\
+            Yildiz Technical University, Istanbul, Turkiye\\
+            \{mohamed.bou, zoaber.alkatmah\}@std.yildiz.edu.tr}
+}
+
+\maketitle
+
+\begin{ozet}
+This study presents a lightweight and portable Postgres database manager designed for web-first operation on a serverless edge runtime. The system replaces desktop-bound administration workflows with a browser-based environment that includes authentication, secure connection profile storage, SQL execution, table browsing, and audit logging. The architecture follows a three-tier model composed of a React presentation layer, Cloudflare Workers based application logic, and a Prisma data access layer for internal state management. The implementation emphasizes security and operational safety through password hashing, role-based authorization, encrypted connection configuration, and controlled query execution. Feasibility analysis indicates that the proposed approach is technically practical and economically efficient for student-scale and small-team deployments.
+\end{ozet}
+\begin{IEEEanahtar}
+serverless computing, database manager, postgres, edge runtime, web application.
+\end{IEEEanahtar}
+
+\begin{abstract}
+This paper introduces a web based Postgres database management system implemented on a serverless edge architecture. The objective is to provide secure and responsive database operations without requiring local desktop installation or dedicated server hosting by end users. The system integrates user authentication, encrypted database connection management, SQL query execution, schema and table browsing, and immutable audit logging. The software design applies an object oriented three-tier structure and uses TypeScript across the stack to improve maintainability and type safety. The final implementation demonstrates that cloud edge execution and serverless functions can provide a practical balance between portability, security, and operating cost for database administration tasks.
+\end{abstract}
+\begin{IEEEkeywords}
+serverless computing, postgres, database administration, cloudflare workers, prisma.
+\end{IEEEkeywords}
+
+
+\section{Introduction}
+Modern database workflows are commonly split between desktop clients and server hosted web tools. Desktop tools can be feature rich, yet they require local installation, device specific setup, and repeated network configuration for each environment. Web tools improve portability but often require continuously managed infrastructure. This project addresses that gap with a serverless, browser based Postgres manager that runs application logic at the edge using Cloudflare Workers \cite{cloudflare-workers}.
+
+The main objective is to provide secure and practical remote database operations from any modern browser while reducing deployment and maintenance burden. The implemented system focuses on four contributions:
+\begin{itemize}
+\item A secure authentication and role-based access model for shared operation.
+\item Encrypted storage and validation of external database connection profiles.
+\item Interactive SQL and table operations with operational guardrails.
+\item End to end auditability through immutable activity logs.
+\end{itemize}
+
+\section{System Analysis and Feasibility}
+
+The analysis phase defined quality criteria and minimum system capabilities before implementation. Core operational metrics are query correctness, stable connectivity to remote databases, handling of complex table payloads, and low request latency under edge execution.
+
+\subsection{Requirement Summary}
+
+Functional requirements were refined from the preliminary study and then mapped to concrete system modules. Table~\ref{tab:req-summary} summarizes the final scope.
+
+\begin{table}[!htbp]
+\centering
+\caption{Functional Requirement Summary}
+\label{tab:req-summary}
+\begin{tabular}{|>{\raggedright\arraybackslash}p{0.22\linewidth}|>{\raggedright\arraybackslash}p{0.27\linewidth}|>{\raggedright\arraybackslash}p{0.4\linewidth}|}
+\hline
+\textbf{Area} & \textbf{Goal} & \textbf{Implemented Capability} \\ \hline
+Authentication & Secure account lifecycle & Register, login, verification, reset password, durable sessions \\ \hline
+Connection management & Safe onboarding of Postgres targets & Encrypted profile storage, connection testing, ownership checks \\ \hline
+Data operation & Practical daily database tasks & SQL execution, table browse, pagination, insert, update, delete \\ \hline
+Governance & Accountability and traceability & Audit logs for critical create, update, delete, and connection actions \\ \hline
+\end{tabular}
+\end{table}
+
+\subsection{Feasibility Discussion}
+
+Technical feasibility is supported by a TypeScript stack and mature open source tooling including React \cite{react}, Prisma ORM \cite{prisma-orm}, and PostgreSQL \cite{postgresql}. Economic feasibility is favorable because development and early deployment are possible within free tiers of cloud services. Legal feasibility remains straightforward because the system relies on open source software and standard credential management practices. Labor and schedule feasibility were met by a two-student team through staged milestones from analysis to testing.
+
+\section{Architecture and Design}
+
+\subsection{Three Tier Architecture}
+
+The platform follows a three tier structure. The presentation tier contains React views for authentication, connection dashboard, SQL editing, table browsing, and log inspection. The logic tier runs on Cloudflare Workers and enforces authorization, validation, and action routing. The data tier combines two planes: an internal SQLite state store through Prisma for application metadata, and external user-provided Postgres instances for operational data.
+
+\subsection{Core Interaction Flow}
+
+A typical SQL execution flow begins when an authenticated user submits a query from the editor view. The worker validates session and role permissions, resolves and decrypts the saved connection profile, applies query guardrails, and forwards the statement to the target database driver. Results are returned to the interface with metadata for pagination and column rendering. Critical state-changing operations are logged to the audit stream for post hoc review.
+
+\subsection{Data Model}
+
+The internal schema is built around three primary entities: \textit{User}, \textit{DatabaseConnection}, and \textit{AuditLog}. The user entity stores identity, password hash, role, and token lifecycle fields for verification and reset operations. The database connection entity stores non-secret routing metadata plus encrypted credentials and test status. The audit log entity records actor, action type, timestamp, and contextual details to support accountability.
+
+\section{Implementation}
+
+\subsection{Technology Stack}
+
+The implementation uses Cloudflare Workers for serverless edge execution and Prisma for internal persistence and model access \cite{cloudflare-workers,prisma-orm}. PostgreSQL remains the operational target database \cite{postgresql}. This combination provides type-safe development and a deployment model that does not require operators to run dedicated application servers.
+
+\subsection{Security and Access Control}
+
+Passwords are hashed before persistence, sessions are stored through durable server side state, and role checks separate read and mutation privileges for users and administrators. Database credentials are encrypted before storage and decrypted only during authorized operations. Connection ownership is enforced so non-admin users can access only their own profiles.
+
+\subsection{Operational Features}
+
+The database dashboard supports profile creation, verification, and lifecycle visibility. The SQL editor executes statements with guardrails for high-risk commands. The table browser provides searchable and paginated views plus row-level insert, update, and delete flows where permissions allow. Every significant mutation is copied into the audit log stream to support investigation and rollback planning.
+
+\section{Limitations and Future Work}
+
+Some ideas in the initial report, such as a full semantic vector search interface and specialized card-first analytics views, remain outside the current production baseline. Future work will prioritize those capabilities after a dedicated evaluation of query performance, index strategy, and user experience impact on large datasets.
+
+\section{Conclusion}
+
+This work demonstrates that a serverless edge architecture can support practical and secure browser based Postgres administration without desktop installation or continuously managed hosting. The resulting system integrates authentication, encrypted connection management, SQL and table workflows, and auditable operations in a cohesive deployment model. The implementation provides a solid foundation for future expansion toward richer analytics and vector-oriented data workflows while preserving security and portability goals.
+
+
+\begin{thebibliography}{00}
+
+\bibitem{cloudflare-workers}
+Cloudflare, Inc., "Cloudflare Workers Documentation," 2026. [Online]. Available: https://developers.cloudflare.com/workers/. Accessed: Jun. 6, 2026.
+
+\bibitem{prisma-orm}
+Prisma Data, Inc., "Prisma Documentation," 2026. [Online]. Available: https://www.prisma.io/docs/. Accessed: Jun. 6, 2026.
+
+\bibitem{react}
+Meta Platforms, Inc., "React Documentation," 2026. [Online]. Available: https://react.dev/. Accessed: Jun. 6, 2026.
+
+\bibitem{postgresql}
+The PostgreSQL Global Development Group, "PostgreSQL Documentation," 2026. [Online]. Available: https://www.postgresql.org/docs/. Accessed: Jun. 6, 2026.
+
+\end{thebibliography}
+
+
+% that's all folks
+\end{document}
