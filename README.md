@@ -115,9 +115,21 @@ pnpm dev
 Create a `.dev.vars` file in the project root with your local secrets:
 
 ```
-SESSION_SECRET=your-local-secret
-EMAIL_FROM=noreply@example.com
-# ... other vars
+WEBAUTHN_RP_ID=localhost
+APP_BASE_URL=http://localhost:5173
+AUTH_SECRET_KEY=replace-with-a-long-random-string
+DB_CONNECTION_ENCRYPTION_KEY=replace-with-a-second-long-random-string
+RESEND_API=re_your_api_key_here
+```
+
+`DB_CONNECTION_ENCRYPTION_KEY` is used to encrypt saved PostgreSQL credentials at rest. If it is omitted, the app falls back to `AUTH_SECRET_KEY`, but using a dedicated key is recommended.
+
+For remote deployments, set secrets with Wrangler:
+
+```shell
+pnpm wrangler secret put AUTH_SECRET_KEY
+pnpm wrangler secret put DB_CONNECTION_ENCRYPTION_KEY
+pnpm wrangler secret put RESEND_API
 ```
 
 ### Database
